@@ -18,37 +18,52 @@ module.exports = function(app, passport) {
 
     //login and logout
     app.route('/login')
-        .get(function(req, res) {
-            //send login page
-        })
-        .post('/login', passport.authenticate('local', {
-            successRedirect: '/',
-            failureRedirect: '/login',
-            failureFlash: true
-        }));
+        .post(function(req, res) {
+            passport.authenticate('login', function(err, user, info) {
+                if (err) return console.error(err);
+                if (!user) {
+                    return res.json({
+                        errorCode: 1,
+                        message: 'Login Failed',
+                        data: null
+                    });
+                }
+                req.logIn(user, function(err) {
+                    if (err) throw err;
+                    return res.json({
+                        errorCode: 0,
+                        message: 'Login successfully',
+                        data: user
+                    });
+                });
+            })(req, res);
+        });
 
     app.route('/logout')
         .get(function(req, res) {
-            req.logout();
-            res.redirect('/');
+            if(req.isAuthenticated()){
+                req.logout();
+            }
+            res.json({
+                errorCode: 0,
+                message: "Logout successfully",
+                data: null
+            });
         });
-
 
     //index page
     app.route('/', '/home')
         .get(function(req, res) {
             //send index/home page
         });
-
     app.route('/latest-dishes')
         .get(dishHandler.getLatestDishes);
 
-
     //user handlers
     app.route('/register')
-    	.get(function(req, res){
-    		//send register page
-    	})
+        .get(function(req, res) {
+            //send register page
+        })
     app.route('/users')
         .post(userHandler.createUser);
 
@@ -61,10 +76,21 @@ module.exports = function(app, passport) {
         .put(isLoggedIn, dishHandler.updateDish)
         .delete(isLoggedIn, dishHandler.removeDish);
 
-
-    //profile
-    app.route('/user/profile')
-    	.get(function(req, res){
-    		//send profile page
-    	});
-}	
+    //user info
+    app.route('/user/info')
+        .get(function(req, res) {
+            if(req.isAuthenticated()){
+                res.json({
+                    errorCode: 0,
+                    message: "user info",
+                    data: req.user
+                });
+            }else{
+                res.json({
+                    errorCode: 1,
+                    message: "not login",
+                    data: null
+                });
+            }
+        });
+}
