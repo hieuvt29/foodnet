@@ -21,11 +21,13 @@ var dishHandler = function() {
         });
     }
     this.getLatestDishes = function(req, res) {
-        var limit = req.params.limit;
+        var page = req.params.page;
+        var items = req.params.items;
 
         Dish.find({})
             .sort('created_at': -1)
-            .limit(limit)
+            .skip(items * (page - 1))
+            .limit(items)
             .exec(function(err, dishes) {
                 let resObj = {
                     errorCode: 0;
