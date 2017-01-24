@@ -60,13 +60,13 @@ class Login extends Component {
 				          	<label htmlFor="password">Mật khẩu</label>
 				        </div>
 				        <div className="col s12">
-				        	<span style={{color: 'red'}}>{this.props.loginStatus}</span>
+				        	<span style={{color: 'red'}}>{this.props.status}</span>
 				        </div>
 				        <div className="input-field col s12">
 				        	<button className={"waves-effect waves-light btn cyan" + (this.props.logining ? " disabled" : "")} 
 				        		type="submit">
 				        		<i className="right material-icons">forward</i>
-				        		{this.props.logining ? "Đang đăng nhập" : "Đăng nhập"}
+				        		{this.props.doing ? "Đang đăng nhập" : "Đăng nhập"}
 				        	</button>
 				        </div>
 				    </div>

@@ -1,5 +1,20 @@
 body {
   margin: 0;
+  background-color: #eeeeee;
+}
+
+.DishList {
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+.shadow {
+  text-shadow: 0px 0px 10px #000000;
+}
+
+.card-comment {
+  border-top: 1px solid rgba(160, 160, 160, 0.2);
+  padding: 20px;
 }
 
 /*# sourceMappingURL=style.css.map */

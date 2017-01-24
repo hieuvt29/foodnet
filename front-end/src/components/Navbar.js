@@ -16,7 +16,7 @@ class Dropdown extends Component {
 class Navbar extends Component {
   	render() {
     	return (
-    		<div>
+    		<div className="navbar-fixed">
 	    		<Dropdown dropdownId="dropdown" />
 		      	<nav className="blue lighten-1">
 		      		<div className="container">

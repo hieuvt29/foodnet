@@ -2,8 +2,8 @@ const DEFAULT_STATE = {
 	loginType: 0,
 	username: '',
 	password: '',
-	loginStatus: '',
-	logining: false
+	status: '',
+	doing: false
 }
 
 export default function login(state = DEFAULT_STATE, action) {
@@ -23,15 +23,15 @@ export default function login(state = DEFAULT_STATE, action) {
 				...state,
 				loginType: action.loginType
 			};
-		case 'SET_LOGIN_STATUS':
+		case 'SET_STATUS':
 			return {
 				...state,
-				loginStatus: action.loginStatus
+				status: action.status
 			};
-		case 'SET_LOGINING':
+		case 'SET_DOING':
 			return {
 				...state,
-				logining: action.logining
+				doing: action.doing
 			};
 		default: 
 			return state;

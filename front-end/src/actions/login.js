@@ -13,20 +13,20 @@ export const setLoginType = (loginType) => ({
 	loginType
 });
 
-export const setLoginStatus = (loginStatus) => ({
-	type: 'SET_LOGIN_STATUS',
-	loginStatus
+export const setStatus = (status) => ({
+	type: 'SET_STATUS',
+	status
 });
 
-export const setLogining = (logining) => ({
-	type: 'SET_LOGINING',
-	logining
+export const setDoing = (doing) => ({
+	type: 'SET_DOING',
+	doing
 });
 
 export const doLogin = (dispatch, getState) => {
 	const login = getState().login;
 	// Do login here
 	// 
-	dispatch(setLogining(true));
-	dispatch(setLoginStatus('Hello'))
+	dispatch(setDoing(true));
+	dispatch(setStatus('Hello'));
 }

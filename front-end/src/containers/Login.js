@@ -1,10 +1,11 @@
 import { connect } from 'react-redux';
 import Login from '../components/Login';
-import { setUsername, setPassword, setLoginType, doLogin } from '../actions/login.js';
+import { setUsername, setPassword, setLoginType, doLogin } 
+	from '../actions/login';
 
 export default connect((state) => ({
-	loginStatus: state.login.loginStatus,
-	logining: state.login.logining
+	status: state.login.status,
+	doing: state.login.doing
 }), {
 	setUsername,
 	setPassword,

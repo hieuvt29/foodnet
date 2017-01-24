@@ -7,6 +7,7 @@ class Signup extends Component {
 			loginType: 0,
 			username: '',
 			password: '',
+			reppassword: '',
 			address: '',
 			hotline: ''
 		}
@@ -14,12 +15,17 @@ class Signup extends Component {
 	}
 
 	onSubmit() {
-
+		this.props.setUsername(this.state.username);
+		this.props.setPassword(this.state.password);
+		this.props.setLoginType(this.state.loginType);
+		this.props.setAddress(this.state.address);
+		this.props.setHotline(this.state.hotline);
+		this.props.doSignup();
 	}
 
 	render() {
 		return (
-			<div style={{width: "450px", margin: "0 auto"}}>
+			<div style={{maxWidth: "450px", margin: "0 auto"}}>
            		<div style={{textAlign: "center"}}><h3>Đăng ký</h3></div>
            		<form onSubmit={(e) => {
            			e.preventDefault();
@@ -59,6 +65,18 @@ class Signup extends Component {
 				          	<label htmlFor="password">Mật khẩu</label>
 				        </div>
 				        <div className="input-field col s12">
+				          	<input id="reppassword" type="password" 
+				          		className={(this.state.reppassword === this.state.password ? "valid" : " invalid")} 
+				          		required
+				          		value={this.state.reppassword}
+				          		onChange={(e) => {
+				          			this.setState({
+				          				reppassword: e.target.value
+				          			})
+				          		}}/>
+				          	<label style={{width: '100%'}} htmlFor="reppassword" data-error="Mật khẩu nhập lại không đúng">Nhập lại mật khẩu</label>
+				        </div>
+				        <div className="input-field col s12">
 				          	<input id="address" type="text" className="validate"
 				          		value={this.state.address}
 				          		onChange={(e) => this.setState({
@@ -69,15 +87,18 @@ class Signup extends Component {
 				        <div className="input-field col s12">
 				          	<input id="hotline" type="text" className="validate"
 				          		value={this.state.hotline}
-				          		onChange={(e) => this.setState({
+				          		onChange={(e) => isNaN(e.target.value) ? null : this.setState({
 				          			hotline: e.target.value
 				          		})}/>
 				          	<label htmlFor="hotline">Số điện thoại</label>
 				        </div>
+				        <div className="col s12">
+				        	<span style={{color: 'red'}}>{this.props.status}</span>
+				        </div>
 				        <div className="input-field col s12">
-				        	<button className={"waves-effect waves-light btn cyan" + (this.props.logining ? " disabled" : "")} 
+				        	<button className={"waves-effect waves-light btn cyan" + (this.props.doing ? " disabled" : "")} 
 				        		type="submit">
-				        		Đăng ký
+				        		{this.props.doing ? "Đang đăng ký" : "Đăng ký"}
 				        		<i className="right material-icons">forward</i>
 				        	</button>
 				        </div>
