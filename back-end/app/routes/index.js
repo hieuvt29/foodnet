@@ -9,7 +9,11 @@ module.exports = function(app, passport) {
         if (req.isAuthenticated()) {
             return next();
         } else {
-            res.redirect('/login');
+            return res.json({
+                errorCode: 1,
+                message: "not login",
+                data: null
+            })
         }
     }
 
@@ -78,19 +82,15 @@ module.exports = function(app, passport) {
 
     //user info
     app.route('/user/info')
-        .get(function(req, res) {
+        .get(isLoggedIn, function(req, res) {
             if(req.isAuthenticated()){
                 res.json({
                     errorCode: 0,
                     message: "user info",
                     data: req.user
                 });
-            }else{
-                res.json({
-                    errorCode: 1,
-                    message: "not login",
-                    data: null
-                });
             }
         });
+    app.route('/user/change-password')
+        .post(isLoggedIn, userHandler.changePassword);
 }
