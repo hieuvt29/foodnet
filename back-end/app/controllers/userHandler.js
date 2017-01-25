@@ -4,7 +4,9 @@ var User = require('../models/User');
 
 var userHandler = function() {
     this.createUser = function(req, res) {
-        User.findOne({ 'username': req.body.username })
+        var username = req.body.username;
+        console.log("username: ", username);
+        User.findOne({ 'username': username})
             .exec(function(err, user) {
                 if (err) {
                     throw err;

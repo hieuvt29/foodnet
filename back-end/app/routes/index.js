@@ -46,7 +46,7 @@ module.exports = function(app, passport) {
         });
 
     app.route('/logout')
-        .get(function(req, res) {
+        .get(isLoggedIn, function(req, res) {
             if(req.isAuthenticated()){
                 req.logout();
             }
