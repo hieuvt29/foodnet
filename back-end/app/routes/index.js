@@ -17,8 +17,6 @@ module.exports = function(app, passport) {
         }
     }
 
-    console.log(dishHandler);
-
     var userHandler = new UserHandler();
     var dishHandler = new DishHandler();
 
@@ -47,7 +45,7 @@ module.exports = function(app, passport) {
 
     app.route('/logout')
         .get(isLoggedIn, function(req, res) {
-            if(req.isAuthenticated()){
+            if (req.isAuthenticated()) {
                 req.logout();
             }
             res.json({
@@ -72,20 +70,10 @@ module.exports = function(app, passport) {
         })
     app.route('/users')
         .post(userHandler.createUser);
-
-    //dish handlers
-    app.route('/dishes/:dishId')
-        .get(dishHandler.getDish);
-
-    app.route('/agent/dish')
-        .post(isLoggedIn, dishHandler.addDish)
-        .put(isLoggedIn, dishHandler.updateDish)
-        .delete(isLoggedIn, dishHandler.removeDish);
-
-    //user info
+        //user info
     app.route('/user/info')
         .get(isLoggedIn, function(req, res) {
-            if(req.isAuthenticated()){
+            if (req.isAuthenticated()) {
                 res.json({
                     errorCode: 0,
                     message: "user info",
@@ -95,4 +83,52 @@ module.exports = function(app, passport) {
         });
     app.route('/user/change-password')
         .post(isLoggedIn, userHandler.changePassword);
+        //get dishes of an agent
+    app.get('/user/dishes', dishHandler.getDishesOfAgent);
+
+    
+    //dish handlers
+    app.route('/dishes/:dishId')
+        .get(dishHandler.getDish);
+
+    app.route('/agent/dish')
+        .post(isLoggedIn, dishHandler.addDish)
+        /* input
+            var username = req.user.username;
+            var name = req.body.name;
+            var price = req.body.price;
+            var info = req.body.info;
+            var img = req.body.img;
+        */
+        .put(isLoggedIn, dishHandler.updateDish)
+        /*input:
+            var dishId = req.body.id;
+            var name = req.body.name;
+            var price = req.body.price;
+            var info = req.body.info;
+            var img = req.body.img;
+        
+        */
+        .delete(isLoggedIn, dishHandler.removeDish);
+        /*input:
+            var username = req.user.username;
+            var dishId = req.body.id;
+        */
+    app.post('/agent/dish/like', isLoggedIn, dishHandler.like);
+    /*input: 
+        var dishId = req.body.id;
+        var userId = req.user._id;
+    */
+    app.post('/agent/dish/dislike', isLoggedIn, dishHandler.dislike);
+    /*input:  
+        var dishId = req.body.id;
+        var userId = req.user._id;
+    */
+    app.post('/agent/dish/comment', isLoggedIn, dishHandler.comment);
+    /*input: 
+        var dishId = req.body.id;
+        var userId = req.user._id;
+        var comment = req.body.comment;
+    */
+
 }
