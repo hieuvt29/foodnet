@@ -12,5 +12,4 @@ var userSchema = new Schema({
 	dishes: [{type: Schema.Types.ObjectId, ref: "Dish"}]
 });
 
-var User = mongoose.model("User", userSchema);
-module.exports = User;
+module.exports = mongoose.model('User', userSchema); 

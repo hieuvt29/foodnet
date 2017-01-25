@@ -1,6 +1,6 @@
 'use strict';
 //errorCode : 0 - no error/ 1 - error
-
+var Schema = require('mongoose').Schema;
 var User = require('../models/User');
 var Dish = require('../models/Dish');
 
@@ -21,19 +21,24 @@ var dishHandler = function() {
         });
     }
     this.getLatestDishes = function(req, res) {
-        var page = req.params.page;
-        var items = req.params.items;
-
+        var page = parseInt(req.query.page);
+        var items = parseInt(req.query.items);
+        console.log('skip', items * (page - 1));
+        console.log('Limit', items);
         Dish.find({})
             .sort({'created_at': -1})
             .skip(items * (page - 1))
             .limit(items)
             .exec(function(err, dishes) {
+                if (err) {
+                    return console.log(err);
+                }
                 let resObj = {
                     errorCode: 0,
                     message: "get latest dishes successfully",
                     data: dishes
                 }
+
                 res.json(resObj);
             });
     }
@@ -48,6 +53,7 @@ var dishHandler = function() {
                 newDish.name = req.body.name;
                 newDish.price = req.body.price;
                 newDish.info = req.body.info;
+                newDish.img = req.body.img;
                 newDish.likes = {
                     count: 0,
                     users: []
@@ -127,6 +133,7 @@ var dishHandler = function() {
             dish.name = req.body.name || dish.name;
             dish.price = req.body.price || dish.price;
             dish.info = req.body.info || dish.info;
+            dish.img = req.body.img || dish.img;
 
             dish.save((err, dish) => {
                 if (err) {

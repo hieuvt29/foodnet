@@ -1,7 +1,10 @@
 'use strict';
 
 var User = require('../models/User');
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7474729d83dc3792562c17add4d5e52451236dc8
 var bcrypt = require('bcrypt-nodejs');
 
 var passport = require('passport'),

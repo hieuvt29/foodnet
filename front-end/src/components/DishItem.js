@@ -50,6 +50,9 @@ class DishItem extends Component {
 					    		<form onSubmit={(e) => {
 					    			e.preventDefault();
 					    			this.props.comment(this.state.comment);
+					    			this.setState({
+					    				comment: ""
+					    			});
 					    		}}>
 							        <div style={{marginTop: "0"}} className="input-field">
 							          	<input autoFocus ref={(input) => {this.input = input; }} type="text" className="validate" 
@@ -62,10 +65,18 @@ class DishItem extends Component {
 					    		</form>
 					    		<div>
 					    			<ul>
-					    				<li>123</li>
-					    				<li>123</li>
-					    				<li>123</li>
-					    				<li>123</li>
+					    				{
+					    					this.props.commentList.map((elem, index) => {
+					    						return (
+					    							<li key={index}>
+					    								<a href="#">
+					    									<span className="comment-user">{elem.user.username}</span>
+					    								</a>
+					    								{elem.comment}
+					    							</li>
+					    						)
+					    					})
+					    				}
 					    			</ul>
 					    		</div>
 					    	</div>
