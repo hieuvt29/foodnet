@@ -13,7 +13,7 @@ var dishHandler = function() {
                 throw err;
             }
             let resObj = {
-                errorCode: 0;
+                errorCode: 0,
                 message: "GET succeeded!",
                 data: dish
             }
@@ -25,12 +25,12 @@ var dishHandler = function() {
         var items = req.params.items;
 
         Dish.find({})
-            .sort('created_at': -1)
+            .sort({'created_at': -1})
             .skip(items * (page - 1))
             .limit(items)
             .exec(function(err, dishes) {
                 let resObj = {
-                    errorCode: 0;
+                    errorCode: 0,
                     message: "get latest dishes successfully",
                     data: dishes
                 }
@@ -73,7 +73,7 @@ var dishHandler = function() {
                 });
                 //response
                 let resObj = {
-                    errorCode: 0;
+                    errorCode: 0,
                     message: "created dish!",
                     data: newDish
                 }
@@ -106,7 +106,7 @@ var dishHandler = function() {
                     }
                     //response
                     let resObj = {
-                        errorCode: 0;
+                        errorCode: 0,
                         message: "removed dish!",
                         data: dish
                     };
@@ -133,7 +133,7 @@ var dishHandler = function() {
                     throw err;
                 }
                 let resObj = {
-                    errorCode: 0;
+                    errorCode: 0,
                     message: "updated dish",
                     data: dish
                 }
@@ -158,7 +158,7 @@ var dishHandler = function() {
                     throw err;
                 }
                 let resObj = {
-                    errorCode: 0;
+                    errorCode: 0,
                     message: "liked",
                     data: dish
                 }
@@ -184,7 +184,7 @@ var dishHandler = function() {
                     throw err;
                 }
                 let resObj = {
-                    errorCode: 0;
+                    errorCode: 0,
                     message: "disliked",
                     data: dish
                 }
@@ -193,3 +193,5 @@ var dishHandler = function() {
         });
     }
 }
+
+module.exports = dishHandler;

@@ -1,6 +1,6 @@
 'use strict';
 
-var User = require('../models/user');
+// var User = require('../models/user');
 
 
 var passport = require('passport'),
@@ -20,7 +20,7 @@ module.exports = function(passport) {
     });
 
 
-    passport.use(new LocalStrategy(
+    passport.use('login', new LocalStrategy(
         function(username, password, done) {
             User.findOne({ username: username }, function(err, user) {
                 if (err) {

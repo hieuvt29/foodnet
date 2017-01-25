@@ -1,12 +1,12 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var User = require('./User');
+// var User = require('./User');
 
 var dishSchema = new Schema({
     name: String,
     price: String,
     info: String,
-    created_at: {type: Data, default: Date.now},
+    created_at: {type: Date, default: Date.now},
     likes: {
         count: Number,
         users: [{ type: Schema.Types.ObjectId, ref: "User" }]
@@ -21,4 +21,5 @@ var dishSchema = new Schema({
     }]
 });
 
-module.exports = mongoose.model("Dish", dishSchema);
+var Dish = mongoose.model("Dish", dishSchema);
+module.exports = Dish;

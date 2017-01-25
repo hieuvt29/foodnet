@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var Dish = require('./Dish');
+// var Dish = require('./Dish');
 
 var userSchema = new Schema({
 	username: String, 
@@ -12,4 +12,5 @@ var userSchema = new Schema({
 	dishes: [{type: Schema.Types.ObjectId, ref: "Dish"}]
 });
 
-module.exports = mongoose.model("User", userSchema);
+var User = mongoose.model("User", userSchema);
+module.exports = User;

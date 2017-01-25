@@ -5,6 +5,11 @@ var passport = require('passport');
 var session = require('express-session');
 var bodyParser = require('body-parser');
 
+//connect the database
+mongoose.connect(process.env.MONGO_URI|| 'mongodb://localhost:27017/foodnet' );
+mongoose.Promise = global.Promise; 
+
+
 var routes = require('./app/routes/index.js');
 
 var app  = express();
@@ -12,9 +17,6 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 
 
-//connect the database
-mongoose.connect(process.env.MONGO_URI|| 'mongodb://localhost:27017/foodnet' );
-mongoose.Promise = global.Promise; 
 
 
 //config path to use shortcut in views part

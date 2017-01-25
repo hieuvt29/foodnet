@@ -17,12 +17,14 @@ module.exports = function(app, passport) {
         }
     }
 
+    console.log(dishHandler);
+
     var userHandler = new UserHandler();
     var dishHandler = new DishHandler();
 
     //login and logout
     app.route('/login')
-        .post(function(req, res) {
+        .post(function(req, res, next) {
             passport.authenticate('login', function(err, user, info) {
                 if (err) return console.error(err);
                 if (!user) {
@@ -40,7 +42,7 @@ module.exports = function(app, passport) {
                         data: user
                     });
                 });
-            })(req, res);
+            })(req, res, next);
         });
 
     app.route('/logout')
