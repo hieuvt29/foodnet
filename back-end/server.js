@@ -8,25 +8,12 @@ var bodyParser = require('body-parser');
 //connect the database
 mongoose.connect(process.env.MONGO_URI|| 'mongodb://localhost:27017/foodnet' );
 mongoose.Promise = global.Promise; 
-
-
-var routes = require('./app/routes/index.js');
-
 var app  = express();
-app.use(bodyParser.urlencoded({extended: false}));
-
-
-
-
-
-//config path to use shortcut in views part
-var rootPath = process.cwd();
-app.use('/controllers', express.static(rootPath + '/app/controllers'));
-
 
 //config the passport 
+app.use(passport.initialize());
+app.use(passport.session());
 require('./app/config/passport')(passport);
-
 //config the session for passport
 app.use(session({
 	secret: 'secretFoodnet',
@@ -34,8 +21,20 @@ app.use(session({
 	saveUninitialized: true
 }));
 
-app.use(passport.initialize());
-app.use(passport.session());
+
+
+var routes = require('./app/routes/index.js');
+
+app.use(bodyParser.urlencoded({extended: false}));
+
+
+//config path to use shortcut in views part
+var rootPath = process.cwd();
+app.use('/controllers', express.static(rootPath + '/app/controllers'));
+
+
+
+
 
 routes(app, passport);
 

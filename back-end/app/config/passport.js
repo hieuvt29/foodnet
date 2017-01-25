@@ -1,7 +1,6 @@
 'use strict';
 
-// var User = require('../models/user');
-
+var User = require('../models/User');
 
 var passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy;
