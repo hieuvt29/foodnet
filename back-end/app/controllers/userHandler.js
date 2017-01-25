@@ -25,7 +25,7 @@ var userHandler = function() {
                         })
                         //response
                     let resObj = {
-                        errorCode: 1,
+                        errorCode: 0,
                         message: "created user!",
                         data: user
                     };
@@ -33,7 +33,7 @@ var userHandler = function() {
                 } else {
                     //response
                     let resObj = {
-                        errorCode: 0,
+                        errorCode: 1,
                         message: "user exists!",
                         data: null
                     };

@@ -1,6 +1,7 @@
 'use strict';
 
 var User = require('../models/User');
+var bcrypt = require('bcrypt-nodejs');
 
 var passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy;
@@ -28,7 +29,7 @@ module.exports = function(passport) {
                 if (!user) {
                     return done(null, false, { message: 'Incorrect username.' });
                 }
-                if (!user.validPassword(password)) {
+                if (!bcrypt.compareSync(password, user.password)) {
                     return done(null, false, { message: 'Incorrect password.' });
                 }
                 return done(null, user);

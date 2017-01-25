@@ -6,6 +6,7 @@ var dishSchema = new Schema({
     name: String,
     price: String,
     info: String,
+    img: String,
     created_at: {type: Date, default: Date.now},
     likes: {
         count: Number,
