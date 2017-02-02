@@ -10,6 +10,7 @@ var dishHandler = function() {
 
         Dish.findById(dishId, function(err, dish) {
             if (err) {
+                console.error(err);
                 throw err;
             }
             let resObj = {
@@ -47,7 +48,10 @@ var dishHandler = function() {
             User.find({ 'username': username })
                 .populate('dishes')
                 .exec(function(err, user) {
-                    if (err) throw err;
+                    if (err) {
+                        console.error(err);
+                        throw err;
+                    }
                     let resObj = {
                         errorCode: 0,
                         message: "get your dishes successfully",
@@ -76,6 +80,7 @@ var dishHandler = function() {
 
         User.findOne({ 'username': username }, function(err, user) {
             if (err) {
+                console.error(err);
                 throw err;
             }
             if (user) {
@@ -84,26 +89,22 @@ var dishHandler = function() {
                 newDish.price = price;
                 newDish.info = info;
                 newDish.img = img;
-                newDish.likes = {
-                    count: 0,
-                    users: []
-                };
-                newDish.dislikes = {
-                    count: 0,
-                    users: []
-                };
+                newDish.likes = { count: 0, users: [] };
+                newDish.dislikes = { count: 0, users: [] };
                 newDish.reviews = [];
 
                 newDish.save(function(err) {
                     if (err) {
+                        console.error(err);
                         throw err;
                     }
                 });
 
-                //add dish to Restaurant
+                //add dish to Agent
                 user.dishes.push(newDish._id);
                 user.save(function(err) {
                     if (err) {
+                        console.error(err);
                         throw err;
                     }
                 });
@@ -125,6 +126,7 @@ var dishHandler = function() {
         //remove ref to the dish in User
         User.findOne({ 'username': username }, function(err, user) {
             if (err) {
+                console.error(err);
                 throw err;
             }
             if (user) {
@@ -132,12 +134,14 @@ var dishHandler = function() {
                 user.dishes.splice(index, 1);
                 user.save((err) => {
                     if (err) {
+                        console.error(err);
                         throw err;
                     }
                 });
                 //Remove dish from database
                 Dish.findByIdAndRemove(dishId, function(err, dish) {
                     if (err) {
+                        console.error(err);
                         throw err;
                     }
                     //response
@@ -161,6 +165,7 @@ var dishHandler = function() {
 
         Dish.findById(dishId, function(err, dish) {
             if (err) {
+                console.error(err);
                 throw err;
             }
 
@@ -171,6 +176,7 @@ var dishHandler = function() {
 
             dish.save((err, dish) => {
                 if (err) {
+                    console.error(err);
                     throw err;
                 }
                 let resObj = {
@@ -198,6 +204,7 @@ var dishHandler = function() {
         } else {
             Dish.findById(dishId, function(err, dish) {
                 if (err) {
+                    console.error(err);
                     throw err;
                 }
                 //if user liked it before, unlike it and vice versa
@@ -206,6 +213,7 @@ var dishHandler = function() {
                     dish.likes.users.push(userId);
                     dish.save(function(err, dish) {
                         if (err) {
+                            console.error(err);
                             throw err;
                         }
                         let resObj = {
@@ -222,6 +230,7 @@ var dishHandler = function() {
                     dish.likes.users.splice(index, 1);
                     dish.save(function(err, dish) {
                         if (err) {
+                            console.error(err);
                             throw err;
                         }
                         let resObj = {
@@ -238,6 +247,7 @@ var dishHandler = function() {
         }
 
     }
+
     this.dislike = function(req, res) {
         var dishId = req.body.id;
         var userId = ObjectId(req.user._id);
@@ -253,18 +263,19 @@ var dishHandler = function() {
         } else {
             Dish.findById(dishId, function(err, dish) {
                 if (err) {
+                    console.error(err);
                     throw err;
                 }
-                
+                console.log("dish from dislike function: ", dish);
                 //if user disdisliked it before, undisdislike it and vice versa
                 if (dish.dislikes.users.indexOf(userId) === -1) {
 
                     dish.dislikes.count++;
-                    //dish.dislikes.users.push(userId);
-                    
+                    dish.dislikes.users.push(userId);
+
                     dish.save(function(err, dish) {
                         if (err) {
-                            console.log("this is error from save function()");
+                            console.error(err);
                             throw err;
                         }
                         let resObj = {
@@ -281,6 +292,7 @@ var dishHandler = function() {
                     dish.dislikes.users.splice(index, 1);
                     dish.save(function(err, dish) {
                         if (err) {
+                            console.error(err);
                             throw err;
                         }
                         let resObj = {
@@ -299,6 +311,7 @@ var dishHandler = function() {
     }
 
     this.comment = function(req, res) {
+        var user = req.user;
         var dishId = req.body.id;
         var userId = req.user._id;
         var comment = req.body.comment;
@@ -313,25 +326,26 @@ var dishHandler = function() {
         } else {
             Dish.findById(dishId, function(err, dish) {
                 if (err) {
+                    console.error(err);
                     throw err;
                 }
 
-                let review = { user: userId, commnent: comment };
+                let review = { user: userId, comment: comment };
                 dish.reviews.push(review);
                 dish.save(function(err, dish) {
                     if (err) {
+                        console.error(err);
                         throw err;
                     }
                     let resObj = {
                         errorCode: 0,
                         message: "commented",
-                        data: review
+                        data: {user: user, comment: comment}
                     }
                     res.json(resObj);
                 })
             });
         }
-
 
     }
 }

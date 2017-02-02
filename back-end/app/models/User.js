@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var Dish = require('./Dish');
 
 var userSchema = new Schema({
 	username: String, 
