@@ -7,24 +7,39 @@ class Dash extends Component {
     constructor (props) {
         super(props);
         this.state = {
-            dish: []
+            dish: [],
+            info: this.props.info
         }
         this.like = this.like.bind(this);
         this.dislike = this.dislike.bind(this);
         this.comment = this.comment.bind(this);
-        console.log(this.props);
-        let info = this.props.info;
-        let showAgent = info && info.isAgent;
-        if (!showAgent) {
-            $.get('/latest-dishes', (data) => {
+        const load = () => {
+            let showAgent = this.state.info && this.state.info.isAgent;
+            if (!showAgent) {
+                $.get('/latest-dishes', (data) => {
+                    if (data.errorCode === 0) {
+                        this.setState({
+                            dish: data.data
+                        });
+                    } else {
+                        console.log('Failed to get dishes');
+                    }
+                });
+            } else {
+                console.log('Show agent');
+            }
+        }
+        if (!this.state.info) {
+            $.get('/user/info', (data) => {
                 if (data.errorCode === 0) {
                     this.setState({
-                        dish: data.data
+                        info: data.data
                     });
-                } else {
-                    console.log('Failed to get dishes');
                 }
+                load();
             });
+        } else {
+            load();
         }
     }
 
@@ -57,8 +72,7 @@ class Dash extends Component {
     }
 
     render() {
-        let info = this.props.info;
-        let showAgent = info && info.isAgent;
+        let showAgent = this.state.info && this.state.info.isAgent;
         return showAgent ? (
             <div>Agent</div>
         ) : (
