@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import { hashHistory } from 'react-router';
 
 export const setUsername = (username) => ({
 	type: 'SET_USERNAME',
@@ -25,15 +26,28 @@ export const setDoing = (doing) => ({
 	doing
 });
 
+export const setInfo = (info) => ({
+	type: 'SET_INFO',
+	info
+});
+
 export const doLogin = (dispatch, getState) => {
 	const login = getState().login;
+	dispatch(setStatus(''));
 	// Do login here
 	$.post('/login', {
 		username: login.username,
 		password: login.password
 	}, (data) => {
 		console.log(data);
+		dispatch(setDoing(false))
+		if (data.errorCode === 0) {
+			hashHistory.push('/');
+			dispatch(setInfo(data.data));
+		} else {
+			dispatch(setStatus('Tài khoản hoặc mật khẩu không đúng!'));
+		}
 	});
 	dispatch(setDoing(true));
-	dispatch(setStatus('Hello'));
+	//dispatch(setStatus('Hello'));
 }

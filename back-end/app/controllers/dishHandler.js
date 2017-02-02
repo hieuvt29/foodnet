@@ -316,7 +316,7 @@ var dishHandler = function() {
                     throw err;
                 }
 
-                let review = { user: userId, commnent: comment };
+                let review = { user: userId, comment: comment };
                 dish.reviews.push(review);
                 dish.save(function(err, dish) {
                     if (err) {

@@ -23,4 +23,8 @@ body {
   padding-right: 5px;
 }
 
+#sidenav-overlay {
+  display: none;
+}
+
 /*# sourceMappingURL=style.css.map */

@@ -3,7 +3,8 @@ const DEFAULT_STATE = {
 	username: '',
 	password: '',
 	status: '',
-	doing: false
+	doing: false,
+	info: null
 }
 
 export default function login(state = DEFAULT_STATE, action) {
@@ -32,6 +33,11 @@ export default function login(state = DEFAULT_STATE, action) {
 			return {
 				...state,
 				doing: action.doing
+			};
+		case 'SET_INFO':
+			return {
+				...state,
+				info: action.info
 			};
 		default: 
 			return state;

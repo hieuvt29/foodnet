@@ -4,7 +4,6 @@ class Login extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			loginType: 0,
 			username: '',
 			password: ''
 		}
@@ -14,7 +13,6 @@ class Login extends Component {
 	onSubmit() {
 		this.props.setUsername(this.state.username);
 		this.props.setPassword(this.state.password);
-		this.props.setLoginType(this.state.loginType);
 		this.props.doLogin();
 	}
 
@@ -27,22 +25,6 @@ class Login extends Component {
            			this.onSubmit();
            		}}>
 	                <div className="row">
-	                	<div className="col s6">
-			            	<input className="with-gap" name="group1" type="radio" id="test3" 
-			            		value={0} checked={this.state.loginType === 0}
-			            		onChange={(e) => this.setState({
-			            			loginType: 0
-			            		})}/>
-			      			<label htmlFor="test3">Tài khoản thực khách</label>
-		      			</div>
-		      			<div className="col s6">
-			      			<input className="with-gap" name="group1" type="radio" id="test4" 
-			      				value={1} checked={this.state.loginType === 1}
-			      				onChange={(e) => this.setState({
-			            			loginType: 1
-			            		})}/>
-			      			<label htmlFor="test4">Tài khoản nhà hàng</label>
-		      			</div>
 				        <div className="input-field col s12">
 				          	<input id="username" type="text" className="validate" required
 				          		value={this.state.username} 
@@ -63,7 +45,7 @@ class Login extends Component {
 				        	<span style={{color: 'red'}}>{this.props.status}</span>
 				        </div>
 				        <div className="input-field col s12">
-				        	<button className={"waves-effect waves-light btn cyan" + (this.props.logining ? " disabled" : "")} 
+				        	<button className={"waves-effect waves-light btn cyan" + (this.props.doing ? " disabled" : "")} 
 				        		type="submit">
 				        		<i className="right material-icons">forward</i>
 				        		{this.props.doing ? "Đang đăng nhập" : "Đăng nhập"}

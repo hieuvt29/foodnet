@@ -14,7 +14,7 @@ class DishItem extends Component {
 			<div className="col s12 m7 z-depth-5">
 		  		<div className="card">
 		    		<div className="card-image">
-		      			<img src={this.props.img} />
+		      			<img src={this.props.img} alt="Food"/>
 		      			<span className="card-title shadow">{this.props.title}</span>
 		    		</div>
 		    		<div className="card-content">
@@ -70,7 +70,7 @@ class DishItem extends Component {
 					    						return (
 					    							<li key={index}>
 					    								<a href="#">
-					    									<span className="comment-user">{elem.user.username}</span>
+					    									<span className="comment-user">{'None'}</span>
 					    								</a>
 					    								{elem.comment}
 					    							</li>
