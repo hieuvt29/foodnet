@@ -8,6 +8,7 @@ class DishItem extends Component {
 			openCmt: false,
 			comment: ''
 		};
+		console.log(this.props.commentList);
 	}
 	render() {
 		return (
@@ -70,7 +71,7 @@ class DishItem extends Component {
 					    						return (
 					    							<li key={index}>
 					    								<a href="#">
-					    									<span className="comment-user">{'None'}</span>
+					    									<span className="comment-user">{elem.user ? elem.user.username : "NULL"}</span>
 					    								</a>
 					    								{elem.comment}
 					    							</li>

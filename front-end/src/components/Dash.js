@@ -96,7 +96,7 @@ class Dash extends Component {
                                         onDislike={(e) => {
                                             this.dislike(elem._id);
                                         }}
-                                        commentList={elem.reviews}
+                                        commentList={elem.reviews.reverse()}
                                         comment={(cmt) => {
                                             this.comment(elem._id, cmt);
                                         }}

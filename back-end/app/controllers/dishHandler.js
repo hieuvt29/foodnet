@@ -33,13 +33,24 @@ var dishHandler = function() {
                 if (err) {
                     return console.log(err);
                 }
-                let resObj = {
-                    errorCode: 0,
-                    message: "get latest dishes successfully",
-                    data: dishes
+
+                var options = {
+                    path: 'reviews.user',
+                    model: 'User'
                 }
 
-                res.json(resObj);
+                Dish.populate(dishes, options, (err, _dishes) => {
+                    if (err) {
+                        throw err;
+                    }
+                    let resObj = {
+                        errorCode: 0,
+                        message: "get latest dishes successfully",
+                        data: _dishes
+                    }
+
+                    res.json(resObj);
+                });
             });
     }
     this.getDishesOfAgent = function(req, res) {
