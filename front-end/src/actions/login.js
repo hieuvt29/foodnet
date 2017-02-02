@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 export const setUsername = (username) => ({
 	type: 'SET_USERNAME',
 	username
@@ -26,7 +28,12 @@ export const setDoing = (doing) => ({
 export const doLogin = (dispatch, getState) => {
 	const login = getState().login;
 	// Do login here
-	// 
+	$.post('/login', {
+		username: login.username,
+		password: login.password
+	}, (data) => {
+		console.log(data);
+	});
 	dispatch(setDoing(true));
 	dispatch(setStatus('Hello'));
 }
