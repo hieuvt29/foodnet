@@ -1,13 +1,19 @@
 'use strict';
 //errorCode : 0 - no error/ 1 - error
-var Schema = require('mongoose').Schema;
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 var User = require('../models/User');
 var Dish = require('../models/Dish');
 var ObjectId = require('mongoose').Types.ObjectId;
 var dishHandler = function() {
     this.getDish = function(req, res) {
         var dishId = req.params.dishId;
-
+        if (!mongoose.Types.ObjectId.isValid(dishId)) {
+            return res.json({
+                errorCode: -1,
+                message: 'Not a objectId'
+            });
+        }
         Dish.findById(dishId, function(err, dish) {
             if (err) {
                 console.error(err);
@@ -55,8 +61,8 @@ var dishHandler = function() {
     }
     this.getDishesOfAgent = function(req, res) {
         var username = req.user.username;
-        if (user.isAgent) {
-            User.find({ 'username': username })
+        if (req.user.isAgent) {
+            User.findOne({ 'username': username })
                 .populate('dishes')
                 .exec(function(err, user) {
                     if (err) {
@@ -74,8 +80,7 @@ var dishHandler = function() {
         } else {
             let resObj = {
                 errorCode: 0,
-                message: "your're not an agent",
-                data: dishes
+                message: "your're not an agent"
             }
 
             res.json(resObj);
@@ -173,7 +178,12 @@ var dishHandler = function() {
         var price = req.body.price;
         var info = req.body.info;
         var img = req.body.img;
-
+        if (!mongoose.Types.ObjectId.isValid(dishId)) {
+            return res.json({
+                errorCode: -1,
+                message: 'Not a objectId'
+            });
+        }
         Dish.findById(dishId, function(err, dish) {
             if (err) {
                 console.error(err);

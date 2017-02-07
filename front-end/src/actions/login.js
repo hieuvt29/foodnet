@@ -26,11 +26,6 @@ export const setDoing = (doing) => ({
 	doing
 });
 
-export const setInfo = (info) => ({
-	type: 'SET_INFO',
-	info
-});
-
 export const doLogin = (dispatch, getState) => {
 	const login = getState().login;
 	dispatch(setStatus(''));
@@ -42,8 +37,8 @@ export const doLogin = (dispatch, getState) => {
 		console.log(data);
 		dispatch(setDoing(false))
 		if (data.errorCode === 0) {
+			localStorage.setItem('user', JSON.stringify(data.data));
 			hashHistory.push('/');
-			dispatch(setInfo(data.data));
 		} else {
 			dispatch(setStatus('Tài khoản hoặc mật khẩu không đúng!'));
 		}

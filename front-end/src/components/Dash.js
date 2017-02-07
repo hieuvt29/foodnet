@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import DishItem from './DishItem';
 import Paging from './Paging';
 import $ from 'jquery';
+import { Link } from 'react-router';
 
 class Dash extends Component {
     constructor (props) {
@@ -10,36 +11,29 @@ class Dash extends Component {
             dish: [],
             info: this.props.info
         }
+        this.user = JSON.parse(localStorage.getItem('user'));
         this.like = this.like.bind(this);
         this.dislike = this.dislike.bind(this);
         this.comment = this.comment.bind(this);
-        const load = () => {
-            let showAgent = this.state.info && this.state.info.isAgent;
-            if (!showAgent) {
-                $.get('/latest-dishes', (data) => {
-                    if (data.errorCode === 0) {
-                        this.setState({
-                            dish: data.data
-                        });
-                    } else {
-                        console.log('Failed to get dishes');
-                    }
+
+        if (this.user.isAgent) {
+            $.get('/user/dishes', (data) => {
+                this.setState({
+                    dish: data.data,
+                    isAgent: true
                 });
-            } else {
-                console.log('Show agent');
-            }
-        }
-        if (!this.state.info) {
-            $.get('/user/info', (data) => {
-                if (data.errorCode === 0) {
-                    this.setState({
-                        info: data.data
-                    });
-                }
-                load();
             });
         } else {
-            load();
+            $.get('/latest-dishes', (data) => {
+                if (data.errorCode === 0) {
+                    this.setState({
+                        dish: data.data,
+                        isAgent: false
+                    });
+                } else {
+                    console.log('Failed to get dishes');
+                }
+            });
         }
     }
 
@@ -63,6 +57,12 @@ class Dash extends Component {
 
     comment(id, comment) {
         console.log('Comment', id, comment);
+        for (let i = 0; i < this.state.dish.length; i++) {
+            if (this.state.dish[i]._id === id) {
+               let nDish = {...this.state.dish};
+               //nDish.
+            }
+        }
         $.post('/agent/dish/comment', {
             id: id,
             comment: comment
@@ -72,17 +72,17 @@ class Dash extends Component {
     }
 
     render() {
-        let showAgent = this.state.info && this.state.info.isAgent;
-        return showAgent ? (
-            <div>Agent</div>
-        ) : (
-        	<div>
+        let showAgent = this.user.isAgent;
+        return (
+            <div>
             	<div className="container">
             		<div className="DishList">
 	            		{
-                            this.state.dish.map((elem, index) => {
+                            (this.state.dish ? this.state.dish : []).map((elem, index) => {
                                 return (
                                     <DishItem key={elem._id}
+                                        id={elem._id}
+                                        agent={showAgent}
                                         title={elem.name}
                                         description={elem.info}
                                         like={elem.likes.count}
@@ -105,6 +105,15 @@ class Dash extends Component {
                             })
                         }
             		</div>
+                    {
+                        showAgent ? (
+                            <div className="fixed">
+                                <Link to="/add" className="btn-floating btn-large green">
+                                    <i className="material-icons">add</i>
+                                </Link>
+                            </div>
+                        ) : null
+                    }
             		<Paging total={5} current={2} 
             			go={(page) => console.log('Go to page ' + page )}
             			next={() => console.log('Go to next page')}

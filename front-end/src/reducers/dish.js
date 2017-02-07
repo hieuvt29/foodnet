@@ -5,6 +5,7 @@ const DEFAULT_STATE = {
 	image: '',
 	status: '',
 	doing: false,
+	id: 0
 };
 
 const dish = (state = DEFAULT_STATE, action) => {
@@ -38,6 +39,11 @@ const dish = (state = DEFAULT_STATE, action) => {
 			return {
 				...state,
 				status: action.status
+			}
+		case 'SET_DISH_ID':
+			return {
+				...state,
+				id: action.id
 			}
 		default: 
 			return state;

@@ -50,3 +50,39 @@ export const addDish = (dispatch, getState) => {
 		}
 	});
 };
+
+export const setDishId = (id) => ({
+	type: 'SET_DISH_ID',
+	id
+})
+
+export const editDish = (dispatch, getState) => {
+	const dish = getState().dish;
+	console.log('Edit dish', dish);
+	dispatch(setDoing(true));
+	$.ajax({
+		url: '/agent/dish',
+		data: {
+			id: dish.id,
+			name: dish.name,
+			price: name.price,
+			info: dish.description,
+			img: dish.image
+		},
+		type: 'PUT',
+		success: (data) => {
+			console.log('Result:', data);
+			if (data.errorCode === 0) {
+				dispatch(setStatus('Sửa thành công!'));
+				dispatch(setDoing(false));
+			} else {
+				dispatch(setStatus('Sửa thất bại!'));
+				dispatch(setDoing(false));
+			}
+		}
+	});
+}
+
+export const deleteDish = (dispatch, getState) => {
+	
+}

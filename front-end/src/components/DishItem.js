@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import { Link } from 'react-router';
 
 class DishItem extends Component {
 	constructor(props) {
@@ -8,7 +8,6 @@ class DishItem extends Component {
 			openCmt: false,
 			comment: ''
 		};
-		console.log(this.props.commentList);
 	}
 	render() {
 		return (
@@ -44,6 +43,21 @@ class DishItem extends Component {
 		      			}}>
 		      				<i style={{verticalAlign: 'middle'}} className="material-icons">comment</i>
 		      			</a>
+		      			{
+		      				this.props.agent ? (
+		      					<span>
+			      					<Link to={"/edit/" + this.props.id} 
+			      						className="btn-floating btn-large waves-effect waves-light  amber darken-4"
+			      						style={{marginRight: '5px'}}>
+					      				<i className="material-icons">mode_edit</i>
+					      			</Link>
+					      			<Link to={"/delete/" + this.props.id} 
+					      				className="btn-floating btn-large waves-effect waves-light red lighten-1">
+					      				<i className="material-icons">delete_forever</i>
+					      			</Link>
+				      			</span>
+		      				) : null
+		      			}
 			    	</div>
 			    	{
 			    		this.state.openCmt ? (

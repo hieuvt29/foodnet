@@ -10,29 +10,25 @@ import Login from './containers/Login';
 import Signup from './containers/Signup';
 import App from './containers/App';
 import AddDish from './containers/AddDish';
-import $ from 'jquery';
-import { setInfo } from './actions/login';
+import Edit from './containers/Edit';
+import Delete from './containers/Delete';
 
 const history = syncHistoryWithStore(hashHistory, store);
-let lock = false;
 
 const checkLogin = (nextState, replace, callback) => {
-	const info = store.getState().login.info;
-	if (!info && !lock) {
-		lock = true;
-		$.get('/user/info', (data) => {
-			lock = false;
-			if (data.errorCode === 0) {
-				store.dispatch(setInfo(data.data));
-				callback();
-			} else {
-				hashHistory.push('/login');
-				callback();
-			}
-		});
+	const info = JSON.parse(localStorage.getItem('user'));
+	if (!info) {
+		replace('/login');
+		callback();
 	} else {
 		callback();
 	}
+}
+
+function NotFound() {
+	return (
+		<h1 style={{textAlign: 'center'}}>Not found</h1>
+	)
 }
 
 ReactDOM.render(
@@ -42,7 +38,10 @@ ReactDOM.render(
 				<IndexRoute component={Dash} onEnter={checkLogin}/>
 				<Route path="login" component={Login}/>
 				<Route path="signup" component={Signup}/>
+				<Route path="edit/:id" component={Edit}/>
+				<Route path="delete/:id" component={Delete}/>
 				<Route path="add" component={AddDish}/>
+				<Route path="*" component={NotFound}/>
             </Route>
         </Router>
   	</Provider>,

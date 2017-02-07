@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { Link } from 'react-router';
 
 class Dropdown extends Component {
 	render() {
@@ -20,7 +21,7 @@ class Navbar extends Component {
 	    		<Dropdown dropdownId="dropdown" />
 		      	<nav className="blue lighten-1">
 		      		<div className="container">
-			      		<a href="#!" className="brand-logo">FoodNet</a>
+			      		<Link to="/" className="brand-logo">FoodNet</Link>
 			      		<a href="#" data-activates="mobile-demo" className="button-collapse"><i className="material-icons">menu</i></a>
 			      		<ul className="right hide-on-med-and-down" style={this.props.info ? {} : {display: 'none'}}>
 					      	<li><a href="sass.html">Sass</a></li>
