@@ -15,11 +15,8 @@ class AddDish extends Component {
 	}
 
 	addDish(item) {
-		this.props.setName(item.name);
-		this.props.setPrice(parseInt(item.price, 10));
-		this.props.setDescription(item.description);
-		this.props.setImage(item.image);
-		this.props.addDish();
+		this.props.addDish(item.name, parseInt(item.price, 10), 
+			item.description, item.image);
 	}
 
 	render() {

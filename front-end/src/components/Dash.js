@@ -7,34 +7,8 @@ import { Link } from 'react-router';
 class Dash extends Component {
     constructor (props) {
         super(props);
-        this.state = {
-            dish: [],
-            info: this.props.info
-        }
         this.user = JSON.parse(localStorage.getItem('user'));
-        this.like = this.like.bind(this);
-        this.dislike = this.dislike.bind(this);
-        this.comment = this.comment.bind(this);
-
-        if (this.user.isAgent) {
-            $.get('/user/dishes', (data) => {
-                this.setState({
-                    dish: data.data,
-                    isAgent: true
-                });
-            });
-        } else {
-            $.get('/latest-dishes', (data) => {
-                if (data.errorCode === 0) {
-                    this.setState({
-                        dish: data.data,
-                        isAgent: false
-                    });
-                } else {
-                    console.log('Failed to get dishes');
-                }
-            });
-        }
+        this.props.loadDish();
     }
 
     like(id) {
@@ -55,22 +29,6 @@ class Dash extends Component {
         });
     }
 
-    comment(id, comment) {
-        console.log('Comment', id, comment);
-        for (let i = 0; i < this.state.dish.length; i++) {
-            if (this.state.dish[i]._id === id) {
-               let nDish = {...this.state.dish};
-               //nDish.
-            }
-        }
-        $.post('/agent/dish/comment', {
-            id: id,
-            comment: comment
-        }, (data) => {
-            console.log(data);
-        });
-    }
-
     render() {
         let showAgent = this.user.isAgent;
         return (
@@ -78,7 +36,7 @@ class Dash extends Component {
             	<div className="container">
             		<div className="DishList">
 	            		{
-                            (this.state.dish ? this.state.dish : []).map((elem, index) => {
+                            (this.props.dishes : []).map((elem, index) => {
                                 return (
                                     <DishItem key={elem._id}
                                         id={elem._id}
@@ -91,14 +49,14 @@ class Dash extends Component {
                                         liked={elem.liked}
                                         img={elem.img}
                                         onLike={(e) => {
-                                            this.like(elem._id);
+                                            this.props.likeDish(elem._id);
                                         }}
                                         onDislike={(e) => {
-                                            this.dislike(elem._id);
+                                            this.props.dislikeDish(elem._id);
                                         }}
-                                        commentList={elem.reviews.reverse()}
+                                        commentList={[...elem.reviews].reverse()}
                                         comment={(cmt) => {
-                                            this.comment(elem._id, cmt);
+                                            this.props.commentDish(elem._id, cmt);
                                         }}
                                     />
                                 )

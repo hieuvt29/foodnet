@@ -9,12 +9,8 @@ class Edit extends Component {
 	}
 
 	editDish(item) {
-		this.props.setName(item.name);
-		this.props.setPrice(item.price);
-		this.props.setDescription(item.description);
-		this.props.setImage(item.image);
-		this.props.setDishId(this.props.params.id);
-		this.props.editDish();
+		this.props.editDish(this.props.params.id, item.name,
+			item.price, item.description, item.image);
 	}
 
 	render() {

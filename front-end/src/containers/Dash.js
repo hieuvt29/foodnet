@@ -1,9 +1,15 @@
 import { connect } from 'react-redux';
 import Dash from '../components/Dash';
-import { setInfo } from '../actions/login';
+import {
+	loadDish,
+	commentDish,
+	likeDish, dislikeDish
+} from '../actions/dish';
 
 export default connect((state) => ({
-	info: state.login.info
+	dishes: state.dish.dishes
 }), {
-	setInfo
+	loadDish: () => loadDish,
+	commentDish,
+	likeDish, dislikeDish
 })(Dash);
