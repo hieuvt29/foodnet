@@ -6,6 +6,6 @@ export default connect((state) => ({
 	doing: state.dish.doing,
 	status: state.dish.status
 }), {
-	deleteDish: () => deleteDish,
+	deleteDish,
 	setDishId
 })(Delete);

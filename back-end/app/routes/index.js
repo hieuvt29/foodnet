@@ -84,7 +84,7 @@ module.exports = function(app, passport) {
     app.route('/user/change-password')
         .post(isLoggedIn, userHandler.changePassword);
         //get dishes of an agent
-    app.get('/user/dishes', dishHandler.getDishesOfAgent);
+    app.get('/user/dishes', isLoggedIn, dishHandler.getDishesOfAgent);
 
     
     //dish handlers

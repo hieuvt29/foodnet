@@ -20,46 +20,48 @@ class DishItem extends Component {
 		    		<div className="card-content">
 		      			<p>{this.props.description}</p>
 		    		</div>
-			    	<div className="card-action">
-			      		<a style={ this.props.liked ? {color: '#42a5f5'} : {color: '#9e9e9e'}} href="#" onClick={(e) => {
-			      			e.preventDefault();
-			      			this.props.onLike();
-			      		}}>
-			      			<i style={{verticalAlign: 'middle'}} className="material-icons">thumb_up</i>
-		      				<span style={{verticalAlign: 'middle', fontSize: '13px'}}>{" " + this.props.like}</span>
-			      		</a>
-			      		<a style={ this.props.disliked ? {color: "#ff5252"} : {color: '#9e9e9e'}} href="#" onClick={(e) => {
-		      				e.preventDefault();
-		      				this.props.onDislike();
-		      			}}>
-		      				<i style={{verticalAlign: 'middle'}} className="material-icons">thumb_down</i>
-		      				<span style={{verticalAlign: 'middle', fontSize: '13px'}}>{" " + this.props.dislike}</span>
-		      			</a>
-		      			<a style={{color: '#9e9e9e'}} href="#" onClick={(e) => {
-		      				e.preventDefault();
-		      				this.setState({
-		      					openCmt: !this.state.openCmt
-		      				});
-		      			}}>
-		      				<i style={{verticalAlign: 'middle'}} className="material-icons">comment</i>
-		      				<span style={{verticalAlign: 'middle', fontSize: '13px'}}>{" " + this.props.commentList.length}</span>
-		      			</a>
-		      			{
-		      				this.props.agent ? (
-		      					<span>
-			      					<Link to={"/edit/" + this.props.id} 
-			      						className="btn-floating btn-large waves-effect waves-light  amber darken-4"
-			      						style={{marginRight: '5px'}}>
-					      				<i className="material-icons">mode_edit</i>
-					      			</Link>
-					      			<Link to={"/delete/" + this.props.id} 
-					      				className="btn-floating btn-large waves-effect waves-light red lighten-1">
-					      				<i className="material-icons">delete_forever</i>
-					      			</Link>
-				      			</span>
-		      				) : null
-		      			}
-			    	</div>
+			    	{
+				    	this.props.notShowActions ? null : (<div className="card-action">
+				      		<a style={ this.props.liked ? {color: '#42a5f5'} : {color: '#9e9e9e'}} href="#" onClick={(e) => {
+				      			e.preventDefault();
+				      			this.props.onLike();
+				      		}}>
+				      			<i style={{verticalAlign: 'middle'}} className="material-icons">thumb_up</i>
+			      				<span style={{verticalAlign: 'middle', fontSize: '13px'}}>{" " + this.props.like}</span>
+				      		</a>
+				      		<a style={ this.props.disliked ? {color: "#ff5252"} : {color: '#9e9e9e'}} href="#" onClick={(e) => {
+			      				e.preventDefault();
+			      				this.props.onDislike();
+			      			}}>
+			      				<i style={{verticalAlign: 'middle'}} className="material-icons">thumb_down</i>
+			      				<span style={{verticalAlign: 'middle', fontSize: '13px'}}>{" " + this.props.dislike}</span>
+			      			</a>
+			      			<a style={{color: '#9e9e9e'}} href="#" onClick={(e) => {
+			      				e.preventDefault();
+			      				this.setState({
+			      					openCmt: !this.state.openCmt
+			      				});
+			      			}}>
+			      				<i style={{verticalAlign: 'middle'}} className="material-icons">comment</i>
+			      				<span style={{verticalAlign: 'middle', fontSize: '13px'}}>{" " + this.props.commentList.length}</span>
+			      			</a>
+			      			{
+			      				this.props.agent ? (
+			      					<span>
+				      					<Link to={"/edit/" + this.props.id} 
+				      						className="btn-floating btn-large waves-effect waves-light  amber darken-4"
+				      						style={{marginRight: '5px'}}>
+						      				<i className="material-icons">mode_edit</i>
+						      			</Link>
+						      			<Link to={"/delete/" + this.props.id} 
+						      				className="btn-floating btn-large waves-effect waves-light red lighten-1">
+						      				<i className="material-icons">delete_forever</i>
+						      			</Link>
+					      			</span>
+			      				) : null
+			      			}
+				    	</div>)
+				    }
 			    	{
 			    		this.state.openCmt ? (
 			    			<div className="card-comment">

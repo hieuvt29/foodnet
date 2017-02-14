@@ -11,7 +11,6 @@ class Delete extends Component {
 			if (data.errorCode !== 0) {
 			 	return hashHistory.push('/');
 			}
-			console.log(data);
 			this.setState(data.data);
 		});
 	}
@@ -43,10 +42,12 @@ class Delete extends Component {
 		                    comment={(cmt) => {
 		                        this.comment(elem._id, cmt);
 		                    }}
+		                    notShowActions={true}
 		                />
 		                <div style={{paddingBottom: '50px'}}>
 		                	<span style={{fontSize: '25px', display: 'block'}}>Bạn có muốn xóa không?</span>
-		                	<button className="waves-effect waves-light btn red lighten-1">Có</button>
+		                	<button className={"waves-effect waves-light btn red lighten-1" + (this.props.doing ? " disabled" : "")}
+		                		onClick={() => this.props.deleteDish(elem._id)}>{this.props.doing ? "Đang xóa" : "Có"}</button>
 		                	<Link to="/" style={{marginLeft: '5px'}} className="waves-effect waves-light btn green lighten-1">Không</Link>
 		                </div>
 	                </div>

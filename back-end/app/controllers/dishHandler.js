@@ -69,13 +69,24 @@ var dishHandler = function() {
                         console.error(err);
                         throw err;
                     }
-                    let resObj = {
-                        errorCode: 0,
-                        message: "get your dishes successfully",
-                        data: user.dishes
+                    var dishes = user.dishes;
+                    var options = {
+                        path: 'reviews.user',
+                        model: 'User'
                     }
 
-                    res.json(resObj);
+                    Dish.populate(dishes, options, (err, _dishes) => {
+                        if (err) {
+                            throw err;
+                        }
+                        let resObj = {
+                            errorCode: 0,
+                            message: "get latest dishes successfully",
+                            data: _dishes
+                        }
+
+                        res.json(resObj);
+                    });
                 });
         } else {
             let resObj = {

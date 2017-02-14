@@ -1,4 +1,10 @@
 import $ from 'jquery';
+import { hashHistory } from 'react-router';
+
+const removeAccountInfo = () => {
+    localStorage.clear();
+    hashHistory.push('/login');
+}
 
 export const setDoing = (doing) => ({
 	type: 'SET_DISH_DOING',
@@ -20,7 +26,9 @@ export const addDish = (name, price, info, img) => (dispatch, getState) => {
 		if (data.errorCode === 0) {
 			dispatch(setStatus('Thêm thành công!'));
 			dispatch(setDoing(false));
-		} else {
+		} else if (data.errorCode === 1) {
+            removeAccountInfo();
+        } else {
 			dispatch(setStatus('Thêm thất bại!'));
 			dispatch(setDoing(false));
 		}
@@ -37,11 +45,12 @@ export const editDish = (id, name, price, info, img) => (dispatch, getState) => 
 		data: newDish,
 		type: 'PUT',
 		success: (data) => {
-			console.log('Result:', data);
 			if (data.errorCode === 0) {
 				dispatch(setStatus('Sửa thành công!'));
 				dispatch(setDoing(false));
-			} else {
+			} else if (data.errorCode === 1) {
+                removeAccountInfo();
+            } else {
 				dispatch(setStatus('Sửa thất bại!'));
 				dispatch(setDoing(false));
 			}
@@ -56,32 +65,25 @@ export const setDishList = (dishes) => ({
 
 export const loadDish = (dispatch, getState) => {
 	const user = JSON.parse(localStorage.getItem('user'));
-	if (user.isAgent) {
-		$.get('/user/dishes', (data) => {
-            if (data.errorCode === 0) {
-                dispatch(setDishList(data.data));
-            } else {
-                console.log('Failed to get dishes');
-            }
-        });
-	} else {
-		$.get('/latest-dishes', (data) => {
-            if (data.errorCode === 0) {
-                const id = user._id;
-                data.data.forEach((e) => {
-                    if (e.likes.users.indexOf(id) !== -1) {
-                        e.liked = true;
-                    }
-                    if (e.dislikes.users.indexOf(id) !== -1) {
-                        e.disliked = true;
-                    }
-                });
-                dispatch(setDishList(data.data));
-            } else {
-                console.log('Failed to get dishes');
-            }
-        });
-	}
+	const loadUrl = user.isAgent ? '/user/dishes' : '/latest-dishes';
+    $.get(loadUrl, (data) => {
+        if (data.errorCode === 0) {
+            const id = user._id;
+            data.data.forEach((e) => {
+                if (e.likes.users.indexOf(id) !== -1) {
+                    e.liked = true;
+                }
+                if (e.dislikes.users.indexOf(id) !== -1) {
+                    e.disliked = true;
+                }
+            });
+            dispatch(setDishList(data.data));
+        } else if (data.errorCode === 1) {
+            removeAccountInfo();
+        } else{
+            console.log('Failed to get dishes');
+        }
+    });
 }
 
 export const commentDish = (id, comment) => (dispatch, getState) => {
@@ -155,5 +157,28 @@ export const dislikeDish = (id) => (dispatch, getState) => {
         id
     }, (data) => {
         console.log(data);
+    });
+}
+
+export const deleteDish = (id) => (dispatch, getState) => {
+    dispatch(setDoing(true));
+    $.ajax({
+        url: '/agent/dish',
+        data: {
+            id
+        },
+        type: 'DELETE',
+        success: (data) => {
+            if (data.errorCode === 0) {
+                dispatch(setStatus('Xóa thành công!'));
+                dispatch(setDoing(false));
+                hashHistory.push('/');
+            } else if (data.errorCode === 1) {
+                removeAccountInfo();
+            } else {
+                dispatch(setStatus('Xóa thất bại!'));
+                dispatch(setDoing(false));
+            }
+        }
     });
 }

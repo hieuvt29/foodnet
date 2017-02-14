@@ -30,7 +30,6 @@ export const doLogin = (username, password) => (dispatch, getState) => {
 
 export const doSignup = (username, password, address, hotline, isAgent) => 
 	(dispatch, getState) => {
-		const signup = getState().signup;
 		// Do signup here
 		dispatch(setDoing(true));
 		$.post('/users', {
