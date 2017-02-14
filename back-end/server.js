@@ -4,12 +4,12 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var session = require('express-session');
 var bodyParser = require('body-parser');
-
+var path = require('path');
 var routes = require('./app/routes/index.js');
 
 var app  = express();
 app.use(bodyParser.urlencoded({extended: false}));
-
+app.use('/static', express.static('../front-end/build/static'));
 
 
 //connect the database
@@ -35,7 +35,13 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.get('/', (req, res) => {
+	res.sendFile(path.join(__dirname, '../front-end/build/index.html'));
+	// res.send('OK');
+});
+
 routes(app, passport);
+// server website
 
 //listen for clients
 var port = process.env.PORT || 8080;
