@@ -7,7 +7,6 @@ class Signup extends Component {
 			loginType: 0,
 			username: '',
 			password: '',
-			reppassword: '',
 			address: '',
 			hotline: ''
 		}
@@ -15,12 +14,8 @@ class Signup extends Component {
 	}
 
 	onSubmit() {
-		this.props.setUsername(this.state.username);
-		this.props.setPassword(this.state.password);
-		this.props.setLoginType(this.state.loginType);
-		this.props.setAddress(this.state.address);
-		this.props.setHotline(this.state.hotline);
-		this.props.doSignup();
+		this.props.doSignup(this.state.username, this.state.password,
+				this.state.address, this.state.hotline, this.state.loginType === 1);
 	}
 
 	render() {
@@ -63,18 +58,6 @@ class Signup extends Component {
 				          			password: e.target.value
 				          		})}/>
 				          	<label htmlFor="password">Mật khẩu</label>
-				        </div>
-				        <div className="input-field col s12">
-				          	<input id="reppassword" type="password" 
-				          		className={(this.state.reppassword === this.state.password ? "valid" : " invalid")} 
-				          		required
-				          		value={this.state.reppassword}
-				          		onChange={(e) => {
-				          			this.setState({
-				          				reppassword: e.target.value
-				          			})
-				          		}}/>
-				          	<label style={{width: '100%'}} htmlFor="reppassword" data-error="Mật khẩu nhập lại không đúng">Nhập lại mật khẩu</label>
 				        </div>
 				        <div className="input-field col s12">
 				          	<input id="address" type="text" className="validate"

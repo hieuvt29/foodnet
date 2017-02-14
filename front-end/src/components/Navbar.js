@@ -23,7 +23,7 @@ class Navbar extends Component {
 		      		<div className="container">
 			      		<Link to="/" className="brand-logo">FoodNet</Link>
 			      		<a href="#" data-activates="mobile-demo" className="button-collapse"><i className="material-icons">menu</i></a>
-			      		<ul className="right hide-on-med-and-down" style={this.props.info ? {} : {display: 'none'}}>
+			      		<ul className="right hide-on-med-and-down">
 					      	<li><a href="sass.html">Sass</a></li>
 					      	<li><a href="badges.html">Components</a></li>
 					      	<li>
@@ -40,6 +40,7 @@ class Navbar extends Component {
 				      	</ul>
 				    </div>
 		      	</nav>
+		      	
 	      	</div>
     	);
   	}

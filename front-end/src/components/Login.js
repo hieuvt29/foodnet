@@ -11,9 +11,7 @@ class Login extends Component {
 	}
 
 	onSubmit() {
-		this.props.setUsername(this.state.username);
-		this.props.setPassword(this.state.password);
-		this.props.doLogin();
+		this.props.doLogin(this.state.username, this.state.password);
 	}
 
     render() {

@@ -1,13 +1,10 @@
 import { connect } from 'react-redux';
 import Signup from '../components/Signup';
-import { setUsername, setPassword, setLoginType, 
-	setAddress, setHotline, doSignup } 
-	from '../actions/signup';
+import { doSignup } from '../actions/authenticate';
 
 export default connect((state) => ({
-	status: state.signup.status,
-	doing: state.signup.doing
+	status: state.authenticate.status,
+	doing: state.authenticate.doing
 }), {
-	setUsername, setPassword, setLoginType, setAddress, setHotline,
-	doSignup: () => doSignup
+	doSignup
 })(Signup)

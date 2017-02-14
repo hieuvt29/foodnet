@@ -1,13 +1,12 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
-import login from './login';
-import signup from './signup';
+import authenticate from './authenticate';
 import dish from './dish';
 
 const rootReducer = combineReducers({
   	routing: routerReducer,
-  	login,
-  	signup, dish
+  	dish,
+  	authenticate
 });
 
-export default rootReducer
+export default rootReducer;

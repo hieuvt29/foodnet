@@ -30,3 +30,44 @@ body {
 	bottom: 20px;
 	right: 20px;
 }
+
+.columns {
+	margin: 15px;
+	-webkit-column-gap: 10px;
+	-webkit-column-fill: auto;
+	-moz-column-gap: 10px;
+	-moz-column-fill: auto;
+	column-gap: 10px;
+	column-fill: auto;
+}
+
+@media screen and (min-width: 992px) {
+    .columns {
+        -webkit-column-count: 3;
+        -moz-column-count: 3;
+        column-count: 3;
+    }
+}
+
+@media screen and (max-width: 991px) {
+    .columns {
+        -webkit-column-count: 2;
+        -moz-column-count: 2;
+        column-count: 2;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .columns {
+        -webkit-column-count: 1;
+        -moz-column-count: 1;
+        column-count: 1;
+    }
+}
+
+.pin {
+	display: inline-block;
+	-webkit-column-break-inside: avoid;
+	-moz-column-break-inside: avoid;
+	column-break-inside: avoid;
+}

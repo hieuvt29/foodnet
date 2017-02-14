@@ -11,7 +11,7 @@ class DishItem extends Component {
 	}
 	render() {
 		return (
-			<div className="col s12 m7 z-depth-5">
+			<div className="pin">
 		  		<div className="card">
 		    		<div className="card-image">
 		      			<img src={this.props.img} alt="Food"/>
@@ -42,6 +42,7 @@ class DishItem extends Component {
 		      				});
 		      			}}>
 		      				<i style={{verticalAlign: 'middle'}} className="material-icons">comment</i>
+		      				<span style={{verticalAlign: 'middle', fontSize: '13px'}}>{" " + this.props.commentList.length}</span>
 		      			</a>
 		      			{
 		      				this.props.agent ? (

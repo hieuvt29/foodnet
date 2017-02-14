@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import DishItem from './DishItem';
 import Paging from './Paging';
-import $ from 'jquery';
 import { Link } from 'react-router';
 
 class Dash extends Component {
@@ -10,31 +9,12 @@ class Dash extends Component {
         this.user = JSON.parse(localStorage.getItem('user'));
         this.props.loadDish();
     }
-
-    like(id) {
-        console.log('LIKE', id);
-        $.post('/agent/dish/like', {
-            id: id
-        }, (data) => {
-            console.log(data);
-        });
-    }
-
-    dislike(id) {
-        console.log('DISLIKE', id);
-        $.post('/agent/dish/dislike', {
-            id: id
-        }, (data) => {
-            console.log(data);
-        });
-    }
-
     render() {
         let showAgent = this.user.isAgent;
         return (
             <div>
-            	<div className="container">
-            		<div className="DishList">
+            	<div className="container-fluid">
+            		<div className="columns">
 	            		{
                             (this.props.dishes : []).map((elem, index) => {
                                 return (
