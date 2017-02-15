@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
-import App from '../components/App';
+import UserInfo from '../components/UserInfo';
 
 export default connect((state) => ({
 
 }), {
 	
-})(App);
+})(UserInfo);

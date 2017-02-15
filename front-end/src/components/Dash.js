@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import DishItem from './DishItem';
 import { Link } from 'react-router';
-import $ from 'jquery';
 
 class Dash extends Component {
     constructor (props) {
@@ -20,21 +19,22 @@ class Dash extends Component {
     }
 
     handleScroll() {
-        if (document.body.scrollTop > this.lastScroll) {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        if (scrollTop > this.lastScroll) {
             const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
             const body = document.body;
             const html = document.documentElement;
             const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight,  html.scrollHeight, html.offsetHeight);
             const windowBottom = windowHeight + window.pageYOffset;
             let value = docHeight;
-            if (docHeight > 100) {
-                value = docHeight - 100;
+            if (docHeight > 150) {
+                value = docHeight - 150;
             }
             if (windowBottom >= value) {
                 this.props.loadMore();
             }
         }
-        this.lastScroll = document.body.scrollTop ;
+        this.lastScroll = scrollTop;
     }
 
     render() {
@@ -55,6 +55,7 @@ class Dash extends Component {
                                     disliked={elem.disliked}
                                     liked={elem.liked}
                                     img={elem.img}
+                                    price={elem.price}
                                     onLike={(e) => {
                                         this.props.likeDish(elem._id);
                                     }}

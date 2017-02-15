@@ -12,6 +12,7 @@ import App from './containers/App';
 import AddDish from './containers/AddDish';
 import Edit from './containers/Edit';
 import Delete from './containers/Delete';
+import UserInfo from './containers/UserInfo';
 
 const history = syncHistoryWithStore(hashHistory, store);
 
@@ -41,6 +42,7 @@ ReactDOM.render(
 				<Route path="edit/:id" component={Edit}/>
 				<Route path="delete/:id" component={Delete}/>
 				<Route path="add" component={AddDish}/>
+				<Route path="user" component={UserInfo}/>
 				<Route path="*" component={NotFound}/>
             </Route>
         </Router>

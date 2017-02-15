@@ -126,7 +126,7 @@ var dishHandler = function() {
                 newDish.likes = { count: 0, users: [] };
                 newDish.dislikes = { count: 0, users: [] };
                 newDish.reviews = [];
-
+                newDish.user = user._id;
                 newDish.save(function(err) {
                     if (err) {
                         console.error(err);

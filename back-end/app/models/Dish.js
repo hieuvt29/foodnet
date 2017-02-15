@@ -18,7 +18,8 @@ var dishSchema = new Schema({
     reviews: [{
         user: { type: Schema.Types.ObjectId, ref: "User" },
         comment: String
-    }]
+    }], 
+    user: { type: Schema.Types.ObjectId, ref: "User" }
 });
 
 var Dish = mongoose.model("Dish", dishSchema);

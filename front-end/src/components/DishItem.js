@@ -18,6 +18,7 @@ class DishItem extends Component {
 		      			<span className="card-title shadow">{this.props.title}</span>
 		    		</div>
 		    		<div className="card-content">
+		    			<p><span style={{color: 'red', fontSize: '18px'}}>{this.props.price + " VNĐ"}</span></p>
 		      			<p>{this.props.description}</p>
 		    		</div>
 			    	{
