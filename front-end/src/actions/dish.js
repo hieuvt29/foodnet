@@ -120,10 +120,7 @@ export const loadMore = () => (dispatch, getState) => {
         const user = JSON.parse(localStorage.getItem('user'));
         const loadUrl = (user.isAgent ? '/user/dishes' : '/latest-dishes') 
                 + '?page=' + page + '&items=' + items;
-        console.log(loadUrl);
         $.get(loadUrl, (data) => {
-            console.log('Loaded');
-            console.log(data);
             dispatch(setDishLoading(false));
             if (data.errorCode === 0) {
                 if (data.data.length > 0) {
