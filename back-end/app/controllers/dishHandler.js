@@ -42,7 +42,8 @@ var dishHandler = function() {
 
                 var options = {
                     path: 'reviews.user',
-                    model: 'User'
+                    model: 'User',
+                    select: 'username'
                 }
 
                 Dish.populate(dishes, options, (err, _dishes) => {
@@ -61,6 +62,11 @@ var dishHandler = function() {
     }
     this.getDishesOfAgent = function(req, res) {
         var username = req.user.username;
+        var page = parseInt(req.query.page);
+        var items = parseInt(req.query.items);
+        if (page < 1) {
+            page = 1;
+        }
         if (req.user.isAgent) {
             User.findOne({ 'username': username })
                 .populate('dishes')
@@ -69,11 +75,12 @@ var dishHandler = function() {
                         console.error(err);
                         throw err;
                     }
-                    var dishes = user.dishes;
+                    var dishes = user.dishes.slice((page - 1) * items, page * items);
                     var options = {
                         path: 'reviews.user',
-                        model: 'User'
-                    }
+                        model: 'User',
+                        select: 'username'
+                    };
 
                     Dish.populate(dishes, options, (err, _dishes) => {
                         if (err) {

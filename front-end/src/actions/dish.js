@@ -6,14 +6,18 @@ const removeAccountInfo = () => {
     hashHistory.push('/login');
 }
 
-export const setDoing = (doing) => ({
+export const setDoing = doing => ({
 	type: 'SET_DISH_DOING',
 	doing
 });
 
-export const setStatus = (status) => ({
+export const setStatus = status => ({
 	type: 'SET_DISH_STATUS',
 	status
+});
+
+export const increasePage = () => ({
+    type: 'INCREASE_PAGE'
 });
 
 export const addDish = (name, price, info, img) => (dispatch, getState) => {
@@ -58,15 +62,35 @@ export const editDish = (id, name, price, info, img) => (dispatch, getState) => 
 	});
 }
 
-export const setDishList = (dishes) => ({
+export const setDishList = dishes => ({
 	type: 'SET_DISH_LIST',
 	dishes
 });
 
-export const loadDish = (dispatch, getState) => {
+export const setDishLoading = loading => ({
+    type: 'SET_DISH_LOADING',
+    loading
+});
+
+export const resetPage = () => ({
+    type: 'RESET_PAGE'
+});
+
+export const loadDish = () => (dispatch, getState) => {
+    const loading = getState().dish.loading;
+    if (loading) {
+        return;
+    }
+    dispatch(setDishLoading(true));
+    dispatch(resetPage());
+    dispatch(increasePage());
+    const page = getState().dish.page;
+    const items = 6;
 	const user = JSON.parse(localStorage.getItem('user'));
-	const loadUrl = user.isAgent ? '/user/dishes' : '/latest-dishes';
+	const loadUrl = (user.isAgent ? '/user/dishes' : '/latest-dishes') 
+        + '?page=' + page + '&items=' + items;
     $.get(loadUrl, (data) => {
+        dispatch(setDishLoading(false));
         if (data.errorCode === 0) {
             const id = user._id;
             data.data.forEach((e) => {
@@ -80,10 +104,46 @@ export const loadDish = (dispatch, getState) => {
             dispatch(setDishList(data.data));
         } else if (data.errorCode === 1) {
             removeAccountInfo();
-        } else{
+        } else {
             console.log('Failed to get dishes');
         }
     });
+}
+
+export const loadMore = () => (dispatch, getState) => {
+    const loading = getState().dish.loading;
+    if (loading) {
+        return;
+    }
+    dispatch(setDishLoading(true));
+    dispatch(increasePage());
+    const page = getState().dish.page;
+    const dishes = getState().dish.dishes;
+    const items = 6;
+    const user = JSON.parse(localStorage.getItem('user'));
+    const loadUrl = (user.isAgent ? '/user/dishes' : '/latest-dishes') 
+            + '?page=' + page + '&items=' + items;
+    // setTimeout(() => {
+        $.get(loadUrl, (data) => {
+            dispatch(setDishLoading(false));
+            if (data.errorCode === 0) {
+                const id = user._id;
+                data.data.forEach((e) => {
+                    if (e.likes.users.indexOf(id) !== -1) {
+                        e.liked = true;
+                    }
+                    if (e.dislikes.users.indexOf(id) !== -1) {
+                        e.disliked = true;
+                    }
+                });
+                dispatch(setDishList([...dishes, ...(data.data)]));
+            } else if (data.errorCode === 1) {
+                removeAccountInfo();
+            } else {
+                console.log('Failed to get dishes');
+            }
+        });
+    // }, 2000);
 }
 
 export const commentDish = (id, comment) => (dispatch, getState) => {

@@ -2,7 +2,8 @@ const DEFAULT_STATE = {
 	status: '',
 	dishes: [],
 	doing: false,
-	id: 0
+	page: 0,
+	loading: false
 };
 
 const dish = (state = DEFAULT_STATE, action) => {
@@ -21,6 +22,21 @@ const dish = (state = DEFAULT_STATE, action) => {
 			return {
 				...state,
 				dishes: action.dishes
+			}
+		case 'INCREASE_PAGE':
+			return {
+				...state,
+				page: state.page + 1
+			}
+		case 'RESET_PAGE':
+			return {
+				...state,
+				page: 0
+			}
+		case 'SET_DISH_LOADING': 
+			return {
+				...state,
+				loading: action.loading
 			}
 		default: 
 			return state;
