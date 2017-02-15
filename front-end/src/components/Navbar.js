@@ -5,16 +5,19 @@ class Dropdown extends Component {
 	render() {
 		return (
 			<ul id={this.props.dropdownId} className="dropdown-content">
-			  	<li><a href="#">one</a></li>
-			  	<li><a href="#">two</a></li>
+			  	<li><a href="#">Thông tin</a></li>
 			  	<li className="divider"></li>
-			  	<li><a href="#">three</a></li>
+			  	<li><a href="#">Đăng xuất</a></li>
 			</ul>
 		)
 	}
 }
 
 class Navbar extends Component {
+	constructor(props) {
+		super(props);
+		this.user = JSON.parse(localStorage.getItem('user'));
+	}
   	render() {
     	return (
     		<div className="navbar-fixed">
@@ -27,8 +30,8 @@ class Navbar extends Component {
 					      	<li><a href="sass.html">Sass</a></li>
 					      	<li><a href="badges.html">Components</a></li>
 					      	<li>
-					      		<a className="dropdown-button" href="#" data-activates="dropdown">Dropdown
-					      			<i className="material-icons right">arrow_drop_down</i>
+					      		<a className="dropdown-button" href="#" data-activates="dropdown">
+					      			{this.user ? this.user.username : ""}<i className="material-icons right">arrow_drop_down</i>
 					      		</a>
 					      	</li>
 					    </ul>
@@ -40,7 +43,6 @@ class Navbar extends Component {
 				      	</ul>
 				    </div>
 		      	</nav>
-		      	
 	      	</div>
     	);
   	}

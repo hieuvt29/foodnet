@@ -112,21 +112,23 @@ export const loadDish = () => (dispatch, getState) => {
 
 export const loadMore = () => (dispatch, getState) => {
     const loading = getState().dish.loading;
-    if (loading) {
-        return;
-    }
-    dispatch(setDishLoading(true));
-    dispatch(increasePage());
-    const page = getState().dish.page;
-    const dishes = getState().dish.dishes;
-    const items = 6;
-    const user = JSON.parse(localStorage.getItem('user'));
-    const loadUrl = (user.isAgent ? '/user/dishes' : '/latest-dishes') 
-            + '?page=' + page + '&items=' + items;
-    // setTimeout(() => {
+    if (!loading) {
+        dispatch(setDishLoading(true));
+        const page = getState().dish.page + 1;
+        const dishes = getState().dish.dishes;
+        const items = 6;
+        const user = JSON.parse(localStorage.getItem('user'));
+        const loadUrl = (user.isAgent ? '/user/dishes' : '/latest-dishes') 
+                + '?page=' + page + '&items=' + items;
+        console.log(loadUrl);
         $.get(loadUrl, (data) => {
+            console.log('Loaded');
+            console.log(data);
             dispatch(setDishLoading(false));
             if (data.errorCode === 0) {
+                if (data.data.length > 0) {
+                    dispatch(increasePage());
+                }
                 const id = user._id;
                 data.data.forEach((e) => {
                     if (e.likes.users.indexOf(id) !== -1) {
@@ -143,7 +145,7 @@ export const loadMore = () => (dispatch, getState) => {
                 console.log('Failed to get dishes');
             }
         });
-    // }, 2000);
+    }
 }
 
 export const commentDish = (id, comment) => (dispatch, getState) => {

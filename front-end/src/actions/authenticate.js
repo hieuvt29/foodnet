@@ -44,3 +44,10 @@ export const doSignup = (username, password, address, hotline, isAgent) =>
 			}
 		});
 	}
+
+export const doLogout = () => (dispatch, getState) => {
+	$.get('/logout', data => {
+		localStorage.clear();
+		hashHistory.push('/login');
+	});
+}

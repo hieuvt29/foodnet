@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import DishItem from './DishItem';
-import Paging from './Paging';
 import { Link } from 'react-router';
+import $ from 'jquery';
 
 class Dash extends Component {
     constructor (props) {
@@ -9,7 +9,14 @@ class Dash extends Component {
         this.user = JSON.parse(localStorage.getItem('user'));
         this.props.loadDish();
         this.handleScroll = this.handleScroll.bind(this);
-        this.lastScroll = 0;
+    }
+
+    componentWillMount() {
+        window.addEventListener('scroll', this.handleScroll);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.handleScroll);
     }
 
     handleScroll() {
@@ -28,14 +35,6 @@ class Dash extends Component {
             }
         }
         this.lastScroll = document.body.scrollTop ;
-    }
-
-    componentDidMount() {
-        window.addEventListener("scroll", this.handleScroll);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener("scroll", this.handleScroll);
     }
 
     render() {
