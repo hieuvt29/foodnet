@@ -1,12 +1,8 @@
 import { combineReducers } from 'redux';
-import { routerReducer } from 'react-router-redux';
-import authenticate from './authenticate';
-import dish from './dish';
+import { routerReducer as routing } from 'react-router-redux';
+import { reducer as login } from '../components/authenticate/Login';
 
-const rootReducer = combineReducers({
-  	routing: routerReducer,
-  	dish,
-  	authenticate
+export default combineReducers({
+    routing,
+    login
 });
-
-export default rootReducer;

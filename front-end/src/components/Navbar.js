@@ -1,56 +1,88 @@
-import React, {Component} from 'react';
-import { Link } from 'react-router';
+import React, { Component } from 'react';
+import AppBar from 'material-ui/AppBar';
+import TextField from 'material-ui/TextField';
+// import FlatButton from 'material-ui/FlatButton';
+import Drawer from 'material-ui/Drawer';
+import MenuItem from 'material-ui/MenuItem';
 
-class Dropdown extends Component {
-	render() {
-		return (
-			<ul id={this.props.dropdownId} className="dropdown-content">
-			  	<li><Link to="/user">Thông tin</Link></li>
-			  	<li className="divider"></li>
-			  	<li><a href="#" onClick={(e) => {
-			  		e.preventDefault();
-			  		this.props.doLogout();
-			  	}}>Đăng xuất</a></li>
-			</ul>
-		)
-	}
+const title = (
+	<div>
+		<span>Foodnet</span>
+		<span style={{
+			marginLeft: '20px',
+			paddingLeft: '20px',
+			borderLeft: '1px solid white'
+		}}>
+			<TextField
+		    	hintText={<span style={{color: 'white'}}>Tìm kiếm</span>}
+		    	inputStyle={{
+		    		color: 'white'
+		    	}}
+		    />
+	    </span>
+	</div>
+);
+
+
+class DrawerSimpleExample extends React.Component {
+
+  	constructor(props) {
+    	super(props);
+    	this.state = {open: false};
+  	}
+
+  	handleToggle = () => this.setState({open: !this.state.open});
+
+  	render() {
+    	return (
+      		<div>
+	        	<Drawer open={this.props.open}>
+	          		<MenuItem>Menu Item</MenuItem>
+	          		<MenuItem>Menu Item 2</MenuItem>
+	        	</Drawer>
+      		</div>
+    	);
+ 	}
 }
 
 class Navbar extends Component {
 	constructor(props) {
 		super(props);
-		this.user = JSON.parse(localStorage.getItem('user'));
+		this.toggle = this.toggle.bind(this);
+		this.state = {
+			open: false
+		}
 	}
-  	render() {
-    	return (
-    		<div className="navbar-fixed">
-	    		<Dropdown dropdownId="dropdown" doLogout={this.props.doLogout}/>
-	    		<Dropdown dropdownId="dropdown2" doLogout={this.props.doLogout}/>
-		      	<nav className="blue lighten-1">
-		      		<div className="container">
-			      		<Link to="/" className="brand-logo">FoodNet</Link>
-			      		<a href="#" data-activates="mobile-demo" className="button-collapse"><i className="material-icons">menu</i></a>
-			      		<ul className="right hide-on-med-and-down">
-					      	<li><a href="sass.html">Sass</a></li>
-					      	<li>
-					      		<a className="dropdown-button" href="#" data-activates="dropdown">
-					      			Tài khoản<i className="material-icons right">arrow_drop_down</i>
-					      		</a>
-					      	</li>
-					    </ul>
-					    <ul className="side-nav" id="mobile-demo">
-					        <li><a href="sass.html">Sass</a></li>
-					        <li>
-					      		<a className="dropdown-button" href="#" data-activates="dropdown2">
-					      			Tài khoản<i className="material-icons right">arrow_drop_down</i>
-					      		</a>
-					      	</li>
-				      	</ul>
-				    </div>
-		      	</nav>
-	      	</div>
-    	);
-  	}
+
+	toggle() {
+		if (this.div.style.marginLeft === "250px") {
+			this.div.style.marginLeft = "0px";
+			this.setState({
+				open: false
+			})
+		} else {
+			this.div.style.marginLeft = "250px";
+			this.setState({
+				open: true
+			})
+		}
+	}
+
+	render() {
+		return (
+			<div style={{
+				transition: "margin-left 0.5s"
+			}} ref={div => {this.div = div}}>
+				<AppBar
+					title={title}
+					onLeftIconButtonTouchTap={(e) => {
+						this.toggle();
+					}}
+				/>
+				<DrawerSimpleExample open={this.state.open} />
+			</div>
+		)
+	}
 }
 
 export default Navbar;
