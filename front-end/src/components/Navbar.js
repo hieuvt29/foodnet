@@ -1,28 +1,12 @@
 import React, { Component } from 'react';
-import AppBar from 'material-ui/AppBar';
 import TextField from 'material-ui/TextField';
-// import FlatButton from 'material-ui/FlatButton';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
-
-const title = (
-	<div>
-		<span>Foodnet</span>
-		<span style={{
-			marginLeft: '20px',
-			paddingLeft: '20px',
-			borderLeft: '1px solid white'
-		}}>
-			<TextField
-		    	hintText={<span style={{color: 'white'}}>Tìm kiếm</span>}
-		    	inputStyle={{
-		    		color: 'white'
-		    	}}
-		    />
-	    </span>
-	</div>
-);
-
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import IconButton from 'material-ui/IconButton';
+import IconMenu from 'material-ui/IconMenu';
+import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
+import RaisedButton from 'material-ui/RaisedButton';
 
 class DrawerSimpleExample extends React.Component {
 
@@ -50,7 +34,8 @@ class Navbar extends Component {
 		super(props);
 		this.toggle = this.toggle.bind(this);
 		this.state = {
-			open: false
+			open: false,
+			value: 3,
 		}
 	}
 
@@ -68,18 +53,49 @@ class Navbar extends Component {
 		}
 	}
 
+  	handleChange = (event, index, value) => this.setState({value});
+
 	render() {
 		return (
-			<div style={{
-				transition: "margin-left 0.5s"
-			}} ref={div => {this.div = div}}>
-				<AppBar
-					title={title}
-					onLeftIconButtonTouchTap={(e) => {
-						this.toggle();
-					}}
-				/>
-				<DrawerSimpleExample open={this.state.open} />
+			<div>
+				<Toolbar style={{
+					backgroundColor: '#00BCD4'
+				}}>
+			        <ToolbarGroup>
+			          	<ToolbarTitle text="Foodnet" style={{
+			          		color: 'white'
+			          	}}/>
+			          	<ToolbarSeparator style={{
+			          		backgroundColor: 'white'
+			          	}}/>
+			          	<TextField
+					    	hintText={<span style={{color: 'white'}}>Tìm kiếm</span>}
+					    	inputStyle={{
+					    		color: 'white'
+					    	}}
+					    	style={{
+					    		marginLeft: '30px'
+					    	}}
+					    />
+			          	
+			        </ToolbarGroup>
+			        <ToolbarGroup lastChild={true}>
+			          	<IconMenu
+					      	iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+					      	anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+					      	targetOrigin={{horizontal: 'left', vertical: 'top'}}
+					      	iconStyle={{
+					      		color: 'white'
+					      	}}
+					    >
+					      	<MenuItem primaryText="Refresh" />
+					      	<MenuItem primaryText="Send feedback" />
+					      	<MenuItem primaryText="Settings" />
+					      	<MenuItem primaryText="Help" />
+					      	<MenuItem primaryText="Sign out" />
+					    </IconMenu>
+			        </ToolbarGroup>
+			    </Toolbar>
 			</div>
 		)
 	}

@@ -1,8 +1,9 @@
 import $ from 'jquery';
 import {
 	LOGIN_SET_USERNAME,
-	LOGIN_SET_PASSWORD
-} from '../../../actions/actionTypes';
+	LOGIN_SET_PASSWORD,
+	LOGIN_SET_STATUS
+} from '../../actions/actionTypes';
 
 export const setUsername = (username) => ({
 	type: LOGIN_SET_USERNAME,
@@ -14,9 +15,18 @@ export const setPassword = (password) => ({
 	password
 });
 
+export const setStatus = (status) => ({
+	type: LOGIN_SET_STATUS,
+	status
+});
+
+
 export const doLogin = () => (dispatch, getState) => {
 	const login = getState().login;
 	$.post('/login', login, res => {
 		console.log(res);
+		if (res.errorCode !== 0) {
+			dispatch(setStatus('Đăng nhập thất bại'));
+		}
 	});
 }

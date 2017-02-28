@@ -1,11 +1,13 @@
 import {
 	LOGIN_SET_USERNAME,
-	LOGIN_SET_PASSWORD
-} from '../../../actions/actionTypes';
+	LOGIN_SET_PASSWORD,
+	LOGIN_SET_STATUS
+} from '../../actions/actionTypes';
 
 const DEFAULT_STATE = {
 	username: '',
-	password: ''
+	password: '',
+	status: ''
 };
 
 const login = (state = DEFAULT_STATE, action) => {
@@ -19,6 +21,11 @@ const login = (state = DEFAULT_STATE, action) => {
 			return {
 				...state,
 				password: action.password
+			}
+		case LOGIN_SET_STATUS:
+			return {
+				...state,
+				status: action.status
 			}
 		default: 
 			return state;
