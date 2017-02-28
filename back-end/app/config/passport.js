@@ -11,18 +11,12 @@ var passport = require('passport'),
 module.exports = function(passport) {
     //session configure
     passport.serializeUser(function(user, done) {
-        done(null, user._id);
+        done(null, user.id);
     });
 
     passport.deserializeUser(function(id, done) {
         User.findById(id, function(err, user) {
-            done(err, {
-                _id: user._id,
-                username: user.username,
-                hotline: user.hotline,
-                address: user.address,
-                isAgent: user.isAgent
-            });
+            done(err, user);
         });
     });
 
@@ -39,13 +33,7 @@ module.exports = function(passport) {
                 if (!bcrypt.compareSync(password, user.password)) {
                     return done(null, false, { message: 'Incorrect password.' });
                 }
-                return done(null, {
-                    _id: user._id,
-                    username: user.username,
-                    hotline: user.hotline,
-                    address: user.address,
-                    isAgent: user.isAgent
-                });
+                return done(null, user);
             });
         }
     ));

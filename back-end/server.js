@@ -4,12 +4,12 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var session = require('express-session');
 var bodyParser = require('body-parser');
-var path = require('path');
+
 var routes = require('./app/routes/index.js');
 
 var app  = express();
 app.use(bodyParser.urlencoded({extended: false}));
-app.use('/static', express.static('../front-end/build/static'));
+
 
 
 //connect the database
@@ -35,13 +35,33 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('/', (req, res) => {
-	res.sendFile(path.join(__dirname, '../front-end/build/index.html'));
-	// res.send('OK');
-});
+//error emitter
+app.use(function(err, req, res, next) {
+    console.error(new Date() + " - " + JSON.stringify(err, null, '\t'));
+    
+    if(err.type) {
+        switch(err.type) {
+            case 'Bad Request':
+                return res.status(400).send({ error: err });
+                break;
+            case 'Request Failed':
+                return res.status(502).send({ error: 'Request Failed' });
+                break;
+            case 'Not Found':
+                return res.status(404).send({ error: 'Not Found' });
+                break;
+        }
+    } else {
+        next(err);
+    }
+})
+
+app.use(function(err, req, res, next) {
+    res.status(500).send({ error: 'Something failed!' });
+})
+//end;
 
 routes(app, passport);
-// server website
 
 //listen for clients
 var port = process.env.PORT || 8080;
