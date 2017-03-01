@@ -1,5 +1,4 @@
 'use strict';
-var diff = require('object-diff');
 
 var UserRepository = function (model) {
 	this.model = model;
@@ -21,10 +20,13 @@ UserRepository.prototype.create = function (userProps, callback) {
 	}
 }
 
-UserRepository.prototype.findById = function (id, callback) {
+UserRepository.prototype.findOne = function (condition, pathPop, selectPop, callback) {
 	this.model
-		.findById(id)
-		.populate('dishes')
+		.findOne(condition)
+		.populate({
+			path: pathPop,
+			select: selectPop
+		})
 		.exec(function (err, user) {
 			if (err)
 				return callback(err);
@@ -33,12 +35,15 @@ UserRepository.prototype.findById = function (id, callback) {
 		})
 }
 
-UserRepository.prototype.findAll = function (condition, orderBy, items, page, callback) {
+UserRepository.prototype.findAll = function (condition, orderBy, items, page, pathPop, selectPop, callback) {
 	this.model.find(condition)
 		.sort(orderBy)
 		.skip(items * page)
 		.limit(items)
-		.populate('dishes')
+		.populate({
+			path: pathPop,
+			select: selectPop
+		})
 		.exec(function (err, users) {
 			if (err) {
 				return callback(err);
@@ -69,3 +74,4 @@ UserRepository.prototype.update = function (userProps, callback) {
 	})
 }
 
+module.exports = UserRepository;

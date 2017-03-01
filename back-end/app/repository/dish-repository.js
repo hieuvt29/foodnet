@@ -1,23 +1,17 @@
 'use strict';
-var diff = require('object-diff');
 
 const DishRepository = function (model) {
 	this.model = model;
 }
 
-DishRepository.prototype.findAll = function (condition, orderBy, items, page, callback) {
+DishRepository.prototype.findAll = function (condition, orderBy, items, page, pathPop, selectPop, callback) {
 	this.model.find(condition)
 		.sort(orderBy)
 		.skip(items * page)
 		.limit(items)
 		.populate({
-			path: 'likes.users'
-		})
-		.populate({
-			path: 'dislikes.users'
-		})
-		.populate({
-			path: 'reviews.type.user'
+			path: pathPop,
+			select: selectPop
 		})
 		.exec(function (err, dishes) {
 			if (err) {
@@ -28,16 +22,11 @@ DishRepository.prototype.findAll = function (condition, orderBy, items, page, ca
 		});
 }
 
-DishRepository.prototype.findById = function (id, callback) {
+DishRepository.prototype.findById = function (id, pathPop, selectPop, callback) {
 	this.model.findById(id)
 		.populate({
-			path: 'likes.users'
-		})
-		.populate({
-			path: 'dislikes.users'
-		})
-		.populate({
-			path: 'reviews.type.user'
+			path: pathPop,
+			select: selectPop
 		})
 		.exec(function (err, dish) {
 			if (err) {

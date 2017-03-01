@@ -1,6 +1,7 @@
 'use strict';
 
-var rootPath = process.cwd();
+var rootPath = process.cwd() + "/back-end";
+console.log(rootPath);
 var User = require(rootPath + '/app/repository/models/user');
 var Dish = require(rootPath + '/app/repository/models/dish');
 
@@ -16,7 +17,7 @@ var UserActionController = require(rootPath + '/app/controllers/user-actions-con
 
 var userController = new UserController(dishRepository, userRepository);
 var dishController = new DishController(dishRepository, userRepository);
-var userActionController = new userActionController(dishRepository, userRepository);
+var userActionController = new UserActionController(dishRepository, userRepository);
 
 module.exports = function (app, passport) {
     function isLoggedIn(req, res, next) {
@@ -30,8 +31,7 @@ module.exports = function (app, passport) {
             })
         }
     }
-
-    //login and logout
+    //user Controllers
     app.route('/login')
         .post(function (req, res, next) {
             passport.authenticate('login', function (err, user, info) {
@@ -66,20 +66,12 @@ module.exports = function (app, passport) {
             });
         });
 
-    //index page
-    app.route('/', '/home')
-        .get(function (req, res) {
-            //send index/home page
-        });
-    app.route('/latest-dishes')
-        .get(dishController.getLatestDishes);
-
-    //user Controllers
     app.route('/register')
         .get(function (req, res) {
             //send register page
         })
-    //user info
+        .post(userController.createUser);
+
     app.route('/user/info')
         .get(isLoggedIn, function (req, res) {
             if (req.isAuthenticated()) {
@@ -92,41 +84,36 @@ module.exports = function (app, passport) {
         });
     app.route('/user/change-password')
         .post(isLoggedIn, userController.changePassword);
-    //get dishes of an agent
-    app.get('/user/dishes', dishController.getDishesOfAgent);
+
 
     app.route('/user')
         .post(userController.createUser)
         .put(userController.updateUser);
 
-    //dish Controllers
-    app.route('/dishes/:dishId')
-        .get(dishController.getDish)
-        .put(dishController.updateDish);
 
-    app.route('/agent/dish')
-        .post(isLoggedIn, dishController.addDish)
-        /* input
-            var username = req.user.username;
-            var name = req.body.name;
-            var price = req.body.price;
-            var info = req.body.info;
-            var img = req.body.img;
-        */
+
+    //dish Controllers
+    app.route('/latest-dishes')
+        .get(dishController.getLatestDishes);
+
+    app.route('/agent/dishes/:dishId')
+        .get(dishController.getDish)
         .put(isLoggedIn, dishController.updateDish)
-        /*input:
-            var dishId = req.body.id;
-            var name = req.body.name;
-            var price = req.body.price;
-            var info = req.body.info;
-            var img = req.body.img;
-        
-        */
         .delete(isLoggedIn, dishController.removeDish);
-    /*input:
+
+
+    app.route('/agent/dishes')
+        .get(dishController.getDishesOfAgent)
+        .post(isLoggedIn, dishController.addDish)
+    /* input
         var username = req.user.username;
-        var dishId = req.body.id;
+        var name = req.body.name;
+        var price = req.body.price;
+        var info = req.body.info;
+        var img = req.body.img;
     */
+
+
     app.post('/agent/dish/like', isLoggedIn, userActionController.like);
     /*input: 
         var dishId = req.body.id;
@@ -143,8 +130,12 @@ module.exports = function (app, passport) {
         var userId = req.user._id;
         var comment = req.body.comment;
     */
-    app.post('agent/dish/interest', isLoggedIn, userActionController.interest)
-    /*input
-        var agentId = req.body.agentId;
-    */
+    app.post('/agent/dish/interest', isLoggedIn, userActionController.interest);
+
+    //index page
+    app.route('/', '/home')
+        .get(function (req, res) {
+            //send index/home page
+        });
+
 }
