@@ -12,10 +12,10 @@ var userSchema = new Schema({
 	password: {
 		type: String,
 		required: true,
-		trim: true,
-		minlength: 4,
-		maxlength: 30
+		trim: true
 	},
+	avartar: {type: String, default: "/img/defaultAvatar.jpg"},
+	
 	created_at: {type: Date, default: Date.now},
 	location: {
 		latitude: String,
@@ -41,7 +41,7 @@ var userSchema = new Schema({
 		required: true
 	},
 
-	dishes:{type: [{type: Schema.Types.ObjectId, ref: "Dish"}], default: []},
+	dishes: {type: [{type: Schema.Types.ObjectId, ref: "Dish"}], default: []},
 
 	interests : {type: [{type: Schema.Types.ObjectId, ref: "Dish"}], default: []}
 	

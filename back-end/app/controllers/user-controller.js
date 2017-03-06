@@ -1,14 +1,19 @@
 'use strict';
 var bcrypt = require('bcrypt-nodejs');
+var dependencies = {
+    dishRepository: null,
+    userRepository: null
+}
 
 var UserController = function (dishRepository, userRepository) {
-    this.dishRepository = dishRepository;
-    this.userRepository = userRepository;
+    dependencies.dishRepository = dishRepository;
+    dependencies.userRepository = userRepository;
 }
 
 UserController.prototype.createUser = function (req, res) {
-    var self = this;
+
     //validate
+    var userObj = {};
     userObj.username = req.body.username;
     userObj.password = bcrypt.hashSync(req.body.password);
     userObj.hotline = req.body.hotline;
@@ -16,15 +21,22 @@ UserController.prototype.createUser = function (req, res) {
     userObj.isAgent = req.body.isAgent;
     userObj.dishes = [];
 
+    var pathPop = 'dishes';
+    var selectPop = null;
     //check and save user
-    self.userRepository.findAll({
+    dependencies.userRepository.findOne({
         'username': userObj.username
-    }, null, null, null, function (err, user) {
+    }, pathPop, selectPop, function (err, user) {
         if (err) {
-            res.send(err);
+            let resObj = {
+                errorCode: 1,
+                message: "bad request",
+                data: null
+            }
+            return res.json(resObj);
         }
         if (!user) {
-            self.userRepository.create(userObj, function (err, newUser) {
+            dependencies.userRepository.create(userObj, function (err, newUser) {
                 //response
                 let resObj = {
                     errorCode: 0,
@@ -49,8 +61,15 @@ UserController.prototype.updateUser = function (req, res) {
 
     userObj.id = req.user._id;
 
-    self.userRepository.update(userObj, function (err, user) {
-        if (err) res.send(err);
+    dependencies.userRepository.update(userObj, function (err, user) {
+        if (err) {
+            let resObj = {
+                errorCode: 1,
+                message: "bad request",
+                data: null
+            }
+            return res.json(resObj);
+        }
         let resObj = {
             errorCode: 0,
             message: "updated user!",
@@ -87,12 +106,20 @@ UserController.prototype.changePassword = function (req, res) {
     }
     req.user.password = bcrypt.hashSync(newPassword);
     req.user.save(function (err) {
-        if (err) res.send(err);
+        if (err) {
+            let resObj = {
+                errorCode: 1,
+                message: "bad request",
+                data: null
+            }
+            return res.json(resObj);
+        }
+        res.json({
+            errorCode: 0,
+            message: 'Password changed',
+            data: req.user
+        });
     });
-    res.json({
-        errorCode: 0,
-        message: 'Password changed',
-        data: req.user
-    });
+
 }
-module.exports = userHandler;
+module.exports = UserController;

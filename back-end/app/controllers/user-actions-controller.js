@@ -1,16 +1,21 @@
 var ObjectId = require('mongoose').Types.ObjectId;
+var dependencies = {
+    dishRepository: null,
+    userRepository: null
+}
 
 
 var UserActionController = function (dishRepository, userRepository) {
-    this.dishRepository = dishRepository;
-    this.userRepository = userRepository;
+    dependencies.dishRepository = dishRepository;
+    dependencies.userRepository = userRepository;
 }
 
 UserActionController.prototype.like = function (req, res) {
-    var self = this;
-    var dishId = req.body.id;
-    var userId = ObjectId(req.user._id);
 
+    var dishId = req.body.id;
+    var userId = req.user._id;
+    var selectPop = "_id";
+    var pathPop = 'likes.users dislikes.users reviews.user';
     if (!dishId) {
         let resObj = {
             errorCode: 1,
@@ -19,21 +24,39 @@ UserActionController.prototype.like = function (req, res) {
         }
         res.json(resObj);
     } else {
-        self.dishRepository.findById(dishId, function (err, dish) {
+        dependencies.dishRepository.findById(dishId, pathPop, selectPop, function (err, dish) {
             if (err) {
-                console.error(err);
-                throw err;
+                let resObj = {
+                    errorCode: 1,
+                    message: "bad request",
+                    data: null
+                }
+                return res.json(resObj);
             }
+
             if (dish) {
                 //if user liked it before, unlike it and vice versa
-                if (dish.likes.users.indexOf(userId) == -1) {
+                let index = -1;
+                let arr = dish.likes.users;
+                for (let i = 0; i < arr.length; i++) {
+                    if (arr[i]._id == userId.toString()) {
+                        index = i;
+                        break;
+                    }
+                }
+                if (index == -1) {
                     dish.likes.count++;
                     dish.likes.users.push(userId);
                     dish.save(function (err, dish) {
                         if (err) {
-                            console.error(err);
-                            throw err;
+                            let resObj = {
+                                errorCode: 1,
+                                message: "bad request",
+                                data: null
+                            }
+                            return res.json(resObj);
                         }
+
                         let resObj = {
                             errorCode: 0,
                             message: "liked",
@@ -43,13 +66,17 @@ UserActionController.prototype.like = function (req, res) {
                     });
                 } else {
                     dish.likes.count--;
-                    let index = dish.likes.users.indexOf(userId);
                     dish.likes.users.splice(index, 1);
                     dish.save(function (err, dish) {
                         if (err) {
-                            console.error(err);
-                            throw err;
+                            let resObj = {
+                                errorCode: 1,
+                                message: "bad request",
+                                data: null
+                            }
+                            return res.json(resObj);
                         }
+
                         let resObj = {
                             errorCode: 0,
                             message: "unliked",
@@ -74,11 +101,11 @@ UserActionController.prototype.like = function (req, res) {
 }
 
 UserActionController.prototype.dislike = function (req, res) {
-    var self = this;
+
     var dishId = req.body.id;
-    var userId = ObjectId(req.user._id);
-    console.log("userId :", userId);
-    console.log("dishId :", dishId);
+    var userId = req.user._id;
+    var selectPop = '_id';
+    var pathPop = 'likes.users dislikes.users reviews.user';
     if (!dishId) {
         let resObj = {
             errorCode: 1,
@@ -87,15 +114,25 @@ UserActionController.prototype.dislike = function (req, res) {
         }
         res.json(resObj);
     } else {
-        self.dishRepository.findById(dishId, function (err, dish) {
+        dependencies.dishRepository.findById(dishId, pathPop, selectPop, function (err, dish) {
             if (err) {
-                console.error(err);
-                throw err;
+                let resObj = {
+                    errorCode: 1,
+                    message: "bad request",
+                    data: null
+                }
+                return res.json(resObj);
             }
-            console.log("dish from dislike function: ", dish);
             if (dish) {
                 //if user disdisliked it before, undisdislike it and vice versa
-                let index = dish.dislikes.users.indexOf(userId);
+                let index = -1;
+                let arr = dish.dislikes.users;
+                for (let i = 0; i < arr.length; i++) {
+                    if (arr[i]._id == userId.toString()) {
+                        index = i;
+                        break;
+                    }
+                }
                 if (index === -1) {
 
                     dish.dislikes.count++;
@@ -103,9 +140,14 @@ UserActionController.prototype.dislike = function (req, res) {
 
                     dish.save(function (err, dish) {
                         if (err) {
-                            console.error(err);
-                            throw err;
+                            let resObj = {
+                                errorCode: 1,
+                                message: "bad request",
+                                data: null
+                            }
+                            return res.json(resObj);
                         }
+
                         let resObj = {
                             errorCode: 0,
                             message: "disliked",
@@ -115,12 +157,15 @@ UserActionController.prototype.dislike = function (req, res) {
                     });
                 } else {
                     dish.dislikes.count--;
-                    console.log("index: ", index);
                     dish.dislikes.users.splice(index, 1);
                     dish.save(function (err, dish) {
                         if (err) {
-                            console.error(err);
-                            throw err;
+                            let resObj = {
+                                errorCode: 1,
+                                message: "bad request",
+                                data: null
+                            }
+                            return res.json(resObj);
                         }
                         let resObj = {
                             errorCode: 0,
@@ -145,11 +190,13 @@ UserActionController.prototype.dislike = function (req, res) {
 }
 
 UserActionController.prototype.comment = function (req, res) {
-    var self = this;
+
     var user = req.user;
     var dishId = req.body.id;
     var userId = req.user._id;
     var comment = req.body.comment;
+    var selectPop = '_id username';
+    var pathPop = 'likes.users dislikes.users reviews.user';
 
     if (!dishId || !comment) {
         let resObj = {
@@ -159,35 +206,45 @@ UserActionController.prototype.comment = function (req, res) {
         };
         res.json(resObj);
     } else {
-        self.dishRepository.findById(dishId, function (err, dish) {
+        dependencies.dishRepository.findById(dishId, pathPop, selectPop, function (err, dish) {
             if (err) {
-                console.error(err);
-                throw err;
+                let resObj = {
+                    errorCode: 1,
+                    message: "bad request",
+                    data: null
+                }
+                return res.json(resObj);
             }
+
             if (dish) {
                 let review = {
                     user: userId,
                     comment: comment
                 };
                 dish.reviews.push(review);
-                dish.save(function (err, dish) {
+                dish.save(function (err) {
                     if (err) {
-                        console.error(err);
-                        throw err;
+                        let resObj = {
+                            errorCode: 1,
+                            message: "bad request",
+                            data: null
+                        }
+                        return res.json(resObj);
                     }
                     let resObj = {
                         errorCode: 0,
                         message: "commented",
                         data: {
-                            user: user,
+                            user: user.username,
                             comment: comment
                         }
                     }
                     res.json(resObj);
-                })
+                });
+
             } else {
                 let resObj = {
-                    errorCode: 1,
+                    errorCode: 0,
                     message: "not found",
                     data: null
                 };
@@ -199,8 +256,11 @@ UserActionController.prototype.comment = function (req, res) {
 }
 
 UserActionController.prototype.interest = function (req, res) {
-    var dishId = req.body.dishId;
+    var dishId = req.body.id;
     var id = req.user._id;
+
+    var pathPop = 'dishes interests';
+    var selectPop = null;
 
     if (!dishId) {
         let resObj = {
@@ -210,39 +270,69 @@ UserActionController.prototype.interest = function (req, res) {
         };
         res.json(resObj);
     } else {
-        dishId = ObjectId(dishId);
-        self.userRepository.findById(id, function (err, user) {
-            if (err) res.send(err);
+
+        dependencies.userRepository.findOne({
+            '_id': id
+        }, pathPop, selectPop, function (err, user) {
+            if (err) {
+                let resObj = {
+                    errorCode: 1,
+                    message: "bad request",
+                    data: null
+                }
+                return res.json(resObj);
+            }
             if (user) {
-                let index = user.interests.indexOf(dishId);
-                if (index === -1) {
-                    user.interests.push(agentId);
-                    user.save(function (err) {
-                        if (err) res.send(err);
-                    })
-                    let resObj = {
-                        errorCode: 0,
-                        message: "interested",
-                        data: {
-                            user: user,
-                            comment: comment
-                        }
+                let index = -1;
+                let arr = user.interests;
+                for (let i = 0; i < arr.length; i++) {
+                    if (arr[i]._id == dishId.toString()) {
+                        index = i;
+                        break;
                     }
-                    res.json(resObj);
+                }
+                if (index === -1) {
+                    user.interests.push(dishId);
+                    user.save(function (err) {
+                        if (err) {
+                            let resObj = {
+                                errorCode: 1,
+                                message: "bad request",
+                                data: null
+                            }
+                            return res.json(resObj);
+                        }
+                        let resObj = {
+                            errorCode: 0,
+                            message: "interested",
+                            data: {
+                                dishes: user.interests
+                            }
+                        }
+                        res.json(resObj);
+                    })
+
                 } else {
                     user.interests.splice(index, 1);
                     user.save(function (err) {
-                        if (err) res.send(err);
-                    })
-                    let resObj = {
-                        errorCode: 0,
-                        message: "uninterested",
-                        data: {
-                            user: user,
-                            comment: comment
+                        if (err) {
+                            let resObj = {
+                                errorCode: 1,
+                                message: "bad request",
+                                data: null
+                            }
+                            return res.json(resObj);
                         }
-                    }
-                    res.json(resObj);
+                        let resObj = {
+                            errorCode: 0,
+                            message: "uninterested",
+                            data: {
+                                dishes: user.interests
+                            }
+                        }
+                        res.json(resObj);
+                    })
+
                 }
             } else {
                 let resObj = {
@@ -257,4 +347,4 @@ UserActionController.prototype.interest = function (req, res) {
     }
 }
 
-module.exports = userActionController;
+module.exports = UserActionController;

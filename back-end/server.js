@@ -9,10 +9,12 @@ var routes = require('./app/routes/index.js');
 
 var app  = express();
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 
 
 
 //connect the database
+// process.env.MONGO_URI = "mongodb://hieuvt:123123@ds033107.mlab.com:33107/foodnet";
 mongoose.connect(process.env.MONGO_URI|| 'mongodb://localhost:27017/foodnet' );
 mongoose.Promise = global.Promise; 
 
