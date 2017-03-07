@@ -40,7 +40,7 @@ export const setStatus = (status) => ({
 
 export const doSignup = () => (dispatch, getState) => {
 	const value = getState().signup;
-	$.post('/users', {
+	$.post('/user', {
 		username: value.username,
 		password: value.password,
 		hotline: value.phone,

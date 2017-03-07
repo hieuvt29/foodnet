@@ -236,7 +236,7 @@ UserActionController.prototype.comment = function (req, res) {
                         message: "commented",
                         data: {
                             user: user.username,
-                            comment: comment
+                            comment: dish.reviews[dish.reviews.length - 1]
                         }
                     }
                     res.json(resObj);

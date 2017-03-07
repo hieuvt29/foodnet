@@ -10,3 +10,7 @@ export const SIGNUP_SET_RESTAURANT = 'SIGNUP_SET_RESTAURANT';
 export const SIGNUP_SET_PHONE = 'SIGNUP_SET_PHONE';
 export const SIGNUP_SET_ADDRESS = 'SIGNUP_SET_ADDRESS';
 export const SIGNUP_SET_STATUS = 'SIGNUP_SET_STATUS';
+
+// Dash
+export const SET_DISHES = 'SET_DISHES';
+export const SET_PAGE = 'SET_PAGE';

@@ -1,4 +1,6 @@
 import $ from 'jquery';
+import { hashHistory } from 'react-router';
+
 import {
 	LOGIN_SET_USERNAME,
 	LOGIN_SET_PASSWORD,
@@ -25,7 +27,10 @@ export const doLogin = () => (dispatch, getState) => {
 	const login = getState().login;
 	$.post('/login', login, res => {
 		console.log(res);
-		if (res.errorCode !== 0) {
+		if (res.errorCode === 0) {
+			localStorage.setItem('user', JSON.stringify(res.data));
+			hashHistory.push('/');
+		} else {
 			dispatch(setStatus('Đăng nhập thất bại'));
 		}
 	});

@@ -1,0 +1,8 @@
+.pin {
+	-webkit-column-break-inside: avoid;
+	-moz-column-break-inside: avoid;
+	column-break-inside: avoid;
+	page-break-inside: avoid;
+	break-inside: avoid;
+	margin-bottom: 15px;
+}

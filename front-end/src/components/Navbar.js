@@ -1,33 +1,32 @@
 import React, { Component } from 'react';
 import TextField from 'material-ui/TextField';
-import Drawer from 'material-ui/Drawer';
+// import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
-import RaisedButton from 'material-ui/RaisedButton';
 
-class DrawerSimpleExample extends React.Component {
+// class DrawerSimpleExample extends React.Component {
 
-  	constructor(props) {
-    	super(props);
-    	this.state = {open: false};
-  	}
+//   	constructor(props) {
+//     	super(props);
+//     	this.state = {open: false};
+//   	}
 
-  	handleToggle = () => this.setState({open: !this.state.open});
+//   	handleToggle = () => this.setState({open: !this.state.open});
 
-  	render() {
-    	return (
-      		<div>
-	        	<Drawer open={this.props.open}>
-	          		<MenuItem>Menu Item</MenuItem>
-	          		<MenuItem>Menu Item 2</MenuItem>
-	        	</Drawer>
-      		</div>
-    	);
- 	}
-}
+//   	render() {
+//     	return (
+//       		<div>
+// 	        	<Drawer open={this.props.open}>
+// 	          		<MenuItem>Menu Item</MenuItem>
+// 	          		<MenuItem>Menu Item 2</MenuItem>
+// 	        	</Drawer>
+//       		</div>
+//     	);
+//  	}
+// }
 
 class Navbar extends Component {
 	constructor(props) {

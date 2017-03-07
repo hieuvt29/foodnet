@@ -1,6 +1,6 @@
 'use strict';
 
-var rootPath = process.cwd() + "/back-end";
+var rootPath = process.cwd();
 console.log(rootPath);
 var User = require(rootPath + '/app/repository/models/user');
 var Dish = require(rootPath + '/app/repository/models/dish');
