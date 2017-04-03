@@ -1,16 +1,12 @@
-// Login page
-export const LOGIN_SET_USERNAME = 'LOGIN_SET_USERNAME';
-export const LOGIN_SET_PASSWORD = 'LOGIN_SET_PASSWORD';
-export const LOGIN_SET_STATUS = 'LOGIN_SET_STATUS';
-
-// Signup page
-export const SIGNUP_SET_USERNAME = 'SIGNUP_SET_USERNAME';
-export const SIGNUP_SET_PASSWORD = 'SIGNUP_SET_PASSWORD';
-export const SIGNUP_SET_RESTAURANT = 'SIGNUP_SET_RESTAURANT';
-export const SIGNUP_SET_PHONE = 'SIGNUP_SET_PHONE';
-export const SIGNUP_SET_ADDRESS = 'SIGNUP_SET_ADDRESS';
-export const SIGNUP_SET_STATUS = 'SIGNUP_SET_STATUS';
-
 // Dash
 export const SET_DISHES = 'SET_DISHES';
 export const SET_PAGE = 'SET_PAGE';
+export const SET_LOADING = 'SET_LOADING';
+
+// Set user
+export const SET_USER = 'SET_USER';
+export const CLEAR_USER = 'CLEAR_USER';
+
+// Information
+export const SHOW_INFO = 'SHOW_INFO';
+export const CLOSE_INFO = 'CLOSE_INFO';

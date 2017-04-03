@@ -59,7 +59,7 @@ DishController.prototype.getLatestDishes = function (req, res) {
         'created_at': -1
     };
     var selectPop = 'username _id';
-    var pathPop = 'likes.users dislikes.users reviews.user';
+    var pathPop = 'likes.users dislikes.users reviews.user creator';
 
     dependencies.dishRepository.findAll({}, orderBy, items, page, pathPop, selectPop, function (err, dishes) {
         if (err) {

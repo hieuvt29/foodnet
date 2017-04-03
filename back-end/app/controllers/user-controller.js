@@ -81,7 +81,7 @@ UserController.prototype.updateUser = function (req, res) {
 }
 UserController.prototype.changePassword = function (req, res) {
     var oldPass = req.body.password;
-    var newPass = req.body.newPassword;
+    var newPassword = req.body.newPassword;
 
     if (!oldPass) {
         return res.json({
@@ -97,7 +97,7 @@ UserController.prototype.changePassword = function (req, res) {
             data: null,
         });
     }
-    if (!bcrypt.compareSync(password, req.user.password)) {
+    if (!bcrypt.compareSync(oldPass, req.user.password)) {
         return res.json({
             errorCode: 1,
             message: 'Password mismatch',

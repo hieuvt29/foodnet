@@ -1,45 +1,7 @@
 import $ from 'jquery';
-import {
-	SIGNUP_SET_USERNAME,
-	SIGNUP_SET_PASSWORD,
-	SIGNUP_SET_RESTAURANT,
-	SIGNUP_SET_PHONE,
-	SIGNUP_SET_ADDRESS,
-	SIGNUP_SET_STATUS
-} from '../../actions/actionTypes';
+import { showInfo } from '../Info/Info.action';
 
-export const setRestaurant = (restaurant) => ({
-	type: SIGNUP_SET_RESTAURANT,
-	restaurant
-});
-
-export const setUsername = (username) => ({
-	type: SIGNUP_SET_USERNAME,
-	username
-});
-
-export const setPassword = (password) => ({
-	type: SIGNUP_SET_PASSWORD,
-	password
-});
-
-export const setPhone = (phone) => ({
-	type: SIGNUP_SET_PHONE,
-	phone
-});
-
-export const setAddress = (address) => ({
-	type: SIGNUP_SET_ADDRESS,
-	address
-});
-
-export const setStatus = (status) => ({
-	type: SIGNUP_SET_STATUS,
-	status
-})
-
-export const doSignup = () => (dispatch, getState) => {
-	const value = getState().signup;
+export const doSignup = (value) => (dispatch, getState) => {
 	$.post('/user', {
 		username: value.username,
 		password: value.password,
@@ -49,7 +11,7 @@ export const doSignup = () => (dispatch, getState) => {
 	}, (res) => {
 		console.log(res);
 		if (res.errorCode !== 0) {
-			dispatch(setStatus('Tài khoản đã tồn tại'));
+			dispatch(showInfo('Tài khoản đã tồn tại'));
 		}
 	});
 }

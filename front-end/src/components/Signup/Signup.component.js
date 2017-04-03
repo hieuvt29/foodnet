@@ -15,34 +15,36 @@ const radioStyle = {
 };
 
 class Signup extends Component {
-	componentWillUnmount() {
-		this.props.setStatus('');
+	constructor(props) {
+		super(props);
+		this.state = {
+			restaurant: false,
+			username: '',
+			password: '',
+			phone: '',
+			address: ''
+		}
 	}
 	render() {
-		const { 
-			value,
-			setRestaurant,
-			setUsername,
-			setPassword,
-			setPhone,
-			setAddress,
-			doSignup
-		} = this.props;
+		const { doSignup } = this.props;
+		const { restaurant, username, password, phone, address } = this.state;
 		return (
 			<div style={style}>
 				<Paper zDepth={3} style={{
 					padding: '20px'
 				}}>
-					<h1 style={{
+					<h3 style={{
 						textAlign: 'center'
-					}}>Đăng ký</h1>
+					}}>Đăng ký</h3>
 					<form onSubmit={e => {
 						e.preventDefault();
-						doSignup();
+						doSignup(this.state);
 					}}>
-						<RadioButtonGroup name="accType" valueSelected={value.restaurant ? "restaurant" : "diner"}
+						<RadioButtonGroup name="accType" valueSelected={restaurant ? "restaurant" : "diner"}
 							onChange={(e, v) => {
-								setRestaurant(v === "restaurant");
+								this.setState({
+									restaurant: (v === "restaurant")
+								});
 							}}
 						>
 						    <RadioButton
@@ -59,41 +61,44 @@ class Signup extends Component {
 						<TextField
 					      	floatingLabelText="Tên người dùng"
 					      	fullWidth={true}
-					      	value={value.username}
+					      	value={username}
 					      	onChange={(e, v) => {
-					      		setUsername(v);
+					      		this.setState({
+					      			username: v
+					      		});
 					      	}}
 					    />
 						<TextField
 					      	floatingLabelText="Mật khẩu"
 					      	fullWidth={true}
 					      	type="password"
-					      	value={value.password}
+					      	value={password}
 					      	onChange={(e, v) => {
-					      		setPassword(v);
+					      		this.setState({
+					      			password: v
+					      		});
 					      	}}
 					    />
 					    <TextField
 					      	floatingLabelText="Số điện thoại"
 					      	fullWidth={true}
-					      	value={value.phone}
+					      	value={phone}
 					      	onChange={(e, v) => {
-					      		setPhone(v);
+					      		this.setState({
+					      			phone: v
+					      		});
 					      	}}
 					    />
 					    <TextField
 					      	floatingLabelText="Địa chỉ"
 					      	fullWidth={true}
-					      	value={value.address}
+					      	value={address}
 					      	onChange={(e, v) => {
-					      		setAddress(v);
+					      		this.setState({
+					      			address: v
+					      		})
 					      	}}
 					    />
-					    <span style={{
-					    	paddingBottom: '10px',
-					    	display: 'block',
-					    	color: 'red'
-					    }}>{value.status}</span>
 				    	<RaisedButton label="Đăng ký ngay" primary={true} 
 				    		fullWidth={true} type="submit"/>
 			    	</form>

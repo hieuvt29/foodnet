@@ -9,47 +9,50 @@ const style = {
 };
 
 class Login extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			username: '',
+			password: ''
+		}
+	}
 	render() {
-		const {
-			value,
-			doLogin,
-			setUsername,
-			setPassword
-		} = this.props;
+		const { doLogin } = this.props;
+		const { username, password } = this.state;
 		return (
 			<div style={style}>
 				<Paper zDepth={3} style={{
 					padding: '20px'
 				}}>
-					<h1 style={{
-						textAlign: 'center'
-					}}>Đăng nhập</h1>
+					<h3 style={{
+						textAlign: 'center',
+						fontWeight: '500'
+					}}>Đăng nhập</h3>
 					<form onSubmit={e => {
 						e.preventDefault();
-						doLogin();
+						doLogin(this.state.username, this.state.password);
 					}}>
 						<TextField
 					      	floatingLabelText="Tên người dùng"
 					      	fullWidth={true}
-					      	value={value.username}
+					      	value={username}
 					      	onChange={(e, v) => {
-					      		setUsername(v);
+					      		this.setState({
+					      			username: v
+					      		});
 					      	}}
 					    />
 						<TextField
 					      	floatingLabelText="Mật khẩu"
 					      	fullWidth={true}
 					      	type="password"
-					      	value={value.password}
+					      	value={password}
 					      	onChange={(e, v) => {
-					      		setPassword(v);
+					      		this.setState({
+					      			password: v
+					      		});
 					      	}}
 					    />
-					    <span style={{
-					    	paddingBottom: '10px',
-					    	display: 'block',
-					    	color: 'red'
-					    }}>{value.status}</span>
 				    	<RaisedButton label="Đăng nhập" primary={true} 
 				    		fullWidth={true} type="submit"/>
 			    	</form>

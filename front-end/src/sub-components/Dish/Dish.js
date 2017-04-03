@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
+import Chip from 'material-ui/Chip';
 
 import './style.css'
 
@@ -20,6 +21,9 @@ const style = {
 	},
 	disliked: {
 		color: '#FF5722'
+	},
+	favorite: {
+		color: '#F44336'
 	}
 }
 
@@ -43,8 +47,8 @@ class Dish extends Component {
 
 	render() {
 		const {
-			text, imgUrl, avatarUrl,
-			username, date,name, price
+			text, imgUrl, avatarUrl, ingredients,
+			username, date,name, price, tags
 		} = this.props;
 		const commentList = [ ...this.props.commentList].reverse();
 		return (
@@ -62,29 +66,65 @@ class Dish extends Component {
 				    <CardText>
 				    	{text}
 				    </CardText>
-				    <CardActions>
+				    {
+			    	(ingredients && ingredients.length !== 0) &&
+			    	 <CardText style={{
+			    	 	paddingTop: '5px',
+			    	 	paddingBottom: '5px'
+			    	 }}>
+				    	<span style={{
+				    		fontWeight: 500
+				    	}}>Thành phần</span>: {ingredients.join(', ')}
+				    </CardText>
+				    }
+				    {
+			    	(tags && tags.length !== 0) &&
+			    	<CardText style={{
+			    		display: 'flex',
+    					flexWrap: 'wrap',
+    					paddingTop: '5px',
+			    	 	paddingBottom: '5px'
+			    	}}>
+				    	{tags.map(tag => (
+				    		<Chip key={tag} style={{margin: 2}}>
+				    			{tag}
+				    		</Chip>
+				    	))}	
+				    </CardText>
+				    }
+				    <CardActions style={{
+				    	borderTop: '1px solid #eee'
+				    }}>
 				      	<FlatButton label={this.props.likeCount} labelPosition="after" 
-				      		icon={<i className="material-icons">thumb_up</i>}
+				      		icon={<i style={style.iconStyle} className="material-icons">thumb_up</i>}
 				      		style={this.props.liked ? style.liked : {}}
 				      		onTouchTap={e => {
 				      			this.props.like();
 				      		}}
 				      	/>
 				      	<FlatButton label={this.props.dislikeCount} labelPosition="after" 
-				      		icon={<i className="material-icons">thumb_down</i>}
+				      		icon={<i style={style.iconStyle} className="material-icons">thumb_down</i>}
 				      		style={this.props.disliked ? style.disliked : {}}
 				      		onTouchTap={e => {
 				      			this.props.dislike();
 				      		}}
 				      	/>
 				      	<FlatButton label={this.props.commentList.length} labelPosition="after" 
-				      		icon={<i className="material-icons">comment</i>}
+				      		icon={<i style={style.iconStyle} className="material-icons">comment</i>}
 				      		onTouchTap={e => {
 				      			this.setState((preState) => ({
 				      				openComment: !preState.openComment
 				      			}));
 				      		}}
 				      	/>
+				      	{ this.props.showFavorite && 
+				      		<FlatButton icon={<i style={style.iconStyle} className="material-icons">favorite</i>}
+					      		style={this.props.isFavorite ? style.favorite : {}}
+					      		onTouchTap={e => {
+					      			this.props.favorite();
+					      		}}
+					      	/>
+				      	}
 				    </CardActions>
 				    { this.state.openComment &&
 				    <CardText>

@@ -15,15 +15,18 @@ module.exports = function(passport) {
     });
 
     passport.deserializeUser(function(id, done) {
-        User.findById(id, function(err, user) {
+        User.findById(id)
+        .populate('interests')
+        .exec(function(err, user) {
             done(err, user);
         });
     });
 
-
     passport.use('login', new LocalStrategy(
         function(username, password, done) {
-            User.findOne({ 'username': username }, function(err, user) {
+            User.findOne({ 'username': username })
+            .populate('interests')
+            .exec(function(err, user) {
                 if (err) {
                     return done(err);
                 }

@@ -1,11 +1,12 @@
 import { connect } from 'react-redux';
 import Dash from './Dash.component';
 import {
-	loadDishes, comment, like, dislike
+	loadDishes, comment, like, dislike, loadMore, favorite
 } from './Dash.action';
 
 export default connect(state => ({
-	value: state.dash
+	value: state.dash,
+	user: state.user
 }), {
-	loadDishes, comment, like, dislike
+	loadDishes, comment, like, dislike, loadMore, favorite
 })(Dash);
