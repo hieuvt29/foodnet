@@ -34,7 +34,7 @@ export const loadDishes = () => (dispatch, getState) => {
 	const favorites = getState().user.interests;
 	if (!loading) {
 		dispatch(setLoading(true));
-		$.get('/latest-dishes?items=' + items + '&page=' + page, data => {
+		$.get('/latest-dishes?limit=' + items + '&offset=' + page, data => {
 			dispatch(setLoading(false));
 			if (data.errorCode === 0) {
 				const dishes = data.data;
@@ -169,7 +169,7 @@ export const loadMore = (cb) => (dispatch, getState) => {
 		dispatch(setLoading(true));
 		const items = LOAD_ITEM_COUNT;
 		const page = value.page;
-		$.get('/latest-dishes?items=' + items + '&page=' + (page + 1), data => {
+		$.get('/latest-dishes?limit=' + items + '&offset=' + (page + 1), data => {
 			dispatch(setLoading(false));
 			if (data.errorCode === 0) {
 				const dishes = data.data;

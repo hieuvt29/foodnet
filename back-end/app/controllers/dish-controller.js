@@ -14,9 +14,47 @@ function DishController(dishRepository, userRepository) {
 
 //     this.dishRepository = dishRepository;
 //     this.userRepository = userRepository;
-
 // }
 
+DishController.prototype.getDishes = function (req, res) {
+
+    var conditions = req.where;
+    var orderBy = req.options.sort;
+    var items = req.options.limit;
+    var page = req.options.skip;
+
+    var pathPop = 'likes.users dislikes.users reviews.user';
+    var selectPop = 'username _id';
+
+    
+    dependencies.dishRepository.findAll(conditions, orderBy, items, page, pathPop, selectPop, function (err, dishes) { 
+        if (err) {
+            let resObj = {
+                errorCode: 1,
+                message: "bad request",
+                data: null
+            }
+            return res.json(resObj);
+        }
+
+        if (dishes) {
+            let resObj = {
+                errorCode: 0,
+                message: "get dishes successfully",
+                data: dishes
+            }
+            res.json(resObj);
+        } else {
+            let resObj = {
+                errorCode: 0,
+                message: "not found",
+                data: dishes
+            }
+            res.json(resObj);
+        }
+
+    });
+}
 DishController.prototype.getDish = function (req, res) {
 
     var dishId = req.params.dishId;
@@ -53,8 +91,8 @@ DishController.prototype.getDish = function (req, res) {
 }
 DishController.prototype.getLatestDishes = function (req, res) {
 
-    var page = parseInt(req.query.page);
-    var items = parseInt(req.query.items);
+    var page = req.options.skip;
+    var items = req.options.limit;
     var orderBy = {
         'created_at': -1
     };
@@ -83,13 +121,13 @@ DishController.prototype.getLatestDishes = function (req, res) {
 
 DishController.prototype.getDishesOfAgent = function (req, res) {
 
-    var agentId = req.query.agentId;
-    var page = parseInt(req.query.page);
-    var items = parseInt(req.query.items);
+    var agentId = req.where.agentId;
+    var page = req.options.skip;
+    var items = req.options.limit;
     var selectPop = 'username _id';
     var pathPop = 'likes.users dislikes.users reviews.user';
-    if (page < 1) {
-        page = 1;
+    if (page < 0) {
+        page = 0;
     }
 
     dependencies.userRepository.findOne({
@@ -106,9 +144,7 @@ DishController.prototype.getDishesOfAgent = function (req, res) {
 
         if (agent && agent.isAgent) {
             dependencies.dishRepository
-                .findAll({
-                    creator: agentId
-                }, {
+                .findAll({creator: agentId}, {
                     created_at: -1
                 }, items, page, pathPop, selectPop, function (err, dishes) {
                     if (err) {

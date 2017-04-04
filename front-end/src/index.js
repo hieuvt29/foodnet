@@ -17,6 +17,9 @@ import { container as Dash } from './components/Dash';
 import { container as AddDish } from './components/AddDish';
 import { container as UserInfo } from './components/UserInfo';
 import { container as Favorite } from './components/Favorite';
+import Dishes from './components/Dishes';
+import Edit from './components/Edit';
+import Search from './components/Search';
 
 const history = syncHistoryWithStore(hashHistory, store);
 injectTapEventPlugin();
@@ -48,6 +51,9 @@ function render() {
 			  				<Route path="add" component={AddDish} />
 			  				<Route path="info" component={UserInfo} />
 			  				<Route path="favorite" component={Favorite} />
+			  				<Route path="dishes" component={Dishes} />
+			  				<Route path="edit/:id" component={Edit} />
+			  				<Route path="search/:s" component={Search} />
 			  			</Route>
 			  			<Route path="login" component={Login} />
 			  			<Route path="signup" component={Signup} />

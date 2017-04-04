@@ -10,3 +10,5 @@ export const CLEAR_USER = 'CLEAR_USER';
 // Information
 export const SHOW_INFO = 'SHOW_INFO';
 export const CLOSE_INFO = 'CLOSE_INFO';
+
+export const SET_TITLE = 'SET_TITLE';

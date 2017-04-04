@@ -95,24 +95,8 @@ function Menu(props) {
 class Navbar extends Component {
 	constructor(props) {
 		super(props);
-		this.toggle = this.toggle.bind(this);
 		this.state = {
-			open: false,
-			value: 3,
-		}
-	}
-
-	toggle() {
-		if (this.div.style.marginLeft === "250px") {
-			this.div.style.marginLeft = "0px";
-			this.setState({
-				open: false
-			})
-		} else {
-			this.div.style.marginLeft = "250px";
-			this.setState({
-				open: true
-			})
+			s: ''
 		}
 	}
 
@@ -128,6 +112,7 @@ class Navbar extends Component {
 						position: 'fixed',
 						top: '0',
 						width: '100%',
+						height: 66,
 						zIndex: '5',
 						boxShadow: 'rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px'
 					}}
@@ -146,19 +131,54 @@ class Navbar extends Component {
 			          		}} />
 			          	</Link>
 			          	<ToolbarSeparator style={{
-			          		backgroundColor: 'white',
+			          		backgroundColor: '#ddd',
 			          		width: '2px'
 			          	}}/>
-			          	<TextField
-					    	hintText={<span style={{color: 'white'}}>Tìm kiếm</span>}
-					    	inputStyle={{
-					    		color: 'white'
-					    	}}
-					    	style={{
-					    		marginLeft: '30px'
-					    	}}
-					    />
-			          	
+			          	<h5 style={{
+			          		color: '#fff',
+			          		fontWeight: 500,
+			          		marginTop: 16,
+			          		marginLeft: 30,
+			          		fontSize: 22
+			          	}}>
+			          		{this.props.title}
+			          	</h5>
+			          	<div style={{
+			          		backgroundColor: '#4DD0E1',
+			          		marginLeft: '30px',
+			          		borderRadius: 5,
+			          		position: 'relative'
+			          	}}>
+			          		<form onSubmit={(e) => {
+			          			e.preventDefault();
+			          			hashHistory.push(`/search/${this.state.s}`);
+			          		}}>
+					          	<i style={{
+					          		color: '#fff',
+					          		marginLeft: '10px',
+					          		    top: 13,
+	    								position: 'absolute'
+					          	}} className="material-icons">search</i>
+					          	<TextField
+					          		type="text"
+							    	hintText={<span style={{color: 'white'}}>Tìm kiếm</span>}
+							    	inputStyle={{
+							    		color: 'white',
+							    		paddingBottom: 5
+							    	}}
+							    	textareaStyle={{
+							    		paddingRight: 5
+							    	}}
+							    	underlineShow={false}
+							    	style={{
+							    		marginLeft: '40px',
+							    		width: '76%'
+							    	}}
+							    	value={this.state.s}
+							    	onChange={(e, v) => this.setState({s: v})}
+							    />
+						    </form>
+			          	</div>
 			        </ToolbarGroup>
 			        <ToolbarGroup lastChild={true}>
 			          	<Menu

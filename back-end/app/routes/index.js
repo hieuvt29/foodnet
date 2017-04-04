@@ -1,6 +1,9 @@
 'use strict';
 
 var rootPath = process.cwd();
+
+// rootPath = rootPath.includes("/back-end")?rootPath: rootPath + "/back-end";
+
 console.log(rootPath);
 var User = require(rootPath + '/app/repository/models/user');
 var Dish = require(rootPath + '/app/repository/models/dish');
@@ -95,6 +98,8 @@ module.exports = function (app, passport) {
     //dish Controllers
     app.route('/latest-dishes')
         .get(dishController.getLatestDishes);
+    app.route('/dishes')
+        .get(dishController.getDishes);
 
     app.route('/agent/dishes/:dishId')
         .get(dishController.getDish)

@@ -4,11 +4,16 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var session = require('express-session');
 var bodyParser = require('body-parser');
+var queryHandler = require('express-api-queryhandler');
 
 var routes = require('./app/routes/index.js');
 
 var app  = express();
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(queryHandler.fields());
+app.use(queryHandler.filter());
+app.use(queryHandler.pagination({limit: 100}));
+app.use(queryHandler.sort());
 app.use(bodyParser.json());
 
 

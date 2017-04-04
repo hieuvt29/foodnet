@@ -1,27 +1,9 @@
 import React, { Component } from 'react';
 import Dish from '../../sub-components/Dish';
 import { hashHistory } from 'react-router';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import CircularProgress from 'material-ui/CircularProgress';
 import './style.css';
-
-const style = {
-	position: 'fixed',
-	right: '40px',
-	bottom: '40px'
-}
-
-function AddButton(props) {
-	return (
-		<FloatingActionButton style={style}
-			backgroundColor="#00C853"
-			onTouchTap={props.onTouchTap}
-		>
-			<ContentAdd />
-		</FloatingActionButton>
-	)
-}
+import AddButton from '../AddButton';
+import Loading from '../Loading';
 
 class Dash extends Component {
 	constructor(props) {
@@ -124,11 +106,7 @@ class Dash extends Component {
 		    		/>
 	    		}
 	    		{ loading &&
-					<div style={{
-						textAlign: 'center'
-					}}>
-						<CircularProgress size={80} thickness={5} />
-					</div>
+					<Loading />
 				}
 			</div>
 		)
