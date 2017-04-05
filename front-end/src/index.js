@@ -20,6 +20,7 @@ import { container as Favorite } from './components/Favorite';
 import Dishes from './components/Dishes';
 import Edit from './components/Edit';
 import Search from './components/Search';
+import Detail from './components/Detail';
 
 const history = syncHistoryWithStore(hashHistory, store);
 injectTapEventPlugin();
@@ -54,6 +55,7 @@ function render() {
 			  				<Route path="dishes" component={Dishes} />
 			  				<Route path="edit/:id" component={Edit} />
 			  				<Route path="search/:s" component={Search} />
+			  				<Route path="detail/:id" component={Detail} />
 			  			</Route>
 			  			<Route path="login" component={Login} />
 			  			<Route path="signup" component={Signup} />
