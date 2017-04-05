@@ -1,3 +1,11 @@
-import Container from './Container';
+import React from 'react';
+import Info from '../Info';
 
-export default Container;
+export default props => {
+	return (
+		<div>
+			<Info />
+			{props.children}
+		</div>
+	)
+}

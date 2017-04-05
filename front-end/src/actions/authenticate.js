@@ -1,7 +1,7 @@
 import $ from 'jquery';
-import { hashHistory } from 'react-router';
-import { showInfo } from '../Info/Info.action';
-import { setUser } from '../../actions/user';
+import { push } from 'react-router-redux';
+import { showInfo } from './info';
+import { setUser } from './user';
 
 export const doLogin = (username, password) => (dispatch, getState) => {
 	$.post('/login', {username, password}, res => {
@@ -9,7 +9,7 @@ export const doLogin = (username, password) => (dispatch, getState) => {
 		if (res.errorCode === 0) {
 			const user = res.data;
 			dispatch(setUser(user));
-			hashHistory.push('/');
+			dispatch(push('/'));
 		} else {
 			dispatch(showInfo('Đăng nhập thất bại'));
 		}

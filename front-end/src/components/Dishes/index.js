@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
 import { connect } from 'react-redux';
-import HorDish from '../../sub-components/HorDish';
+import HorDish from '../HorDish';
 import RaisedButton from 'material-ui/RaisedButton';
 import { hashHistory } from 'react-router';
 import _ from 'lodash';

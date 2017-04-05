@@ -4,23 +4,25 @@ var rootPath = process.cwd();
 
 // rootPath = rootPath.includes("/back-end")?rootPath: rootPath + "/back-end";
 
-console.log(rootPath);
-var User = require(rootPath + '/app/repository/models/user');
-var Dish = require(rootPath + '/app/repository/models/dish');
+// console.log(rootPath);
+var User = require('../repository/models/user');
+var Dish = require('../repository/models/dish');
 
-var UserRepository = require(rootPath + '/app/repository/user-repository');
-var DishRepository = require(rootPath + '/app/repository/dish-repository');
+var UserRepository = require('../repository/user-repository');
+var DishRepository = require('../repository/dish-repository');
 
 var userRepository = new UserRepository(User);
 var dishRepository = new DishRepository(Dish);
 
-var UserController = require(rootPath + '/app/controllers/user-controller');
-var DishController = require(rootPath + '/app/controllers/dish-controller');
-var UserActionController = require(rootPath + '/app/controllers/user-actions-controller')
+var UserController = require('../controllers/user-controller');
+var DishController = require('../controllers/dish-controller');
+var UserActionController = require('../controllers/user-actions-controller')
 
 var userController = new UserController(dishRepository, userRepository);
 var dishController = new DishController(dishRepository, userRepository);
 var userActionController = new UserActionController(dishRepository, userRepository);
+
+var dishControllerMiddleware = require('../middlewares/dish-ctrl-mw');
 
 module.exports = function (app, passport) {
     function isLoggedIn(req, res, next) {
@@ -97,19 +99,19 @@ module.exports = function (app, passport) {
 
     //dish Controllers
     app.route('/latest-dishes')
-        .get(dishController.getLatestDishes);
+        .get(dishController.getLatestDishes, dishControllerMiddleware.getLatestDishes);
     app.route('/dishes')
-        .get(dishController.getDishes);
+        .get(dishController.getDishes, dishControllerMiddleware.getDishes);
 
     app.route('/agent/dishes/:dishId')
-        .get(dishController.getDish)
-        .put(isLoggedIn, dishController.updateDish)
-        .delete(isLoggedIn, dishController.removeDish);
+        .get(dishController.getDish, dishControllerMiddleware.getDish)
+        .put(isLoggedIn, dishController.updateDish, dishControllerMiddleware.updateDish)
+        .delete(isLoggedIn, dishController.removeDish, dishControllerMiddleware.removeDish);
 
 
     app.route('/agent/dishes')
-        .get(dishController.getDishesOfAgent)
-        .post(isLoggedIn, dishController.addDish)
+        .get(dishController.getDishesOfAgent, dishControllerMiddleware.getDishesOfAgent)
+        .post(isLoggedIn, dishController.addDish, dishControllerMiddleware.addDish)
     /* input
         var username = req.user.username;
         var name = req.body.name;

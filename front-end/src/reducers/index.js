@@ -1,13 +1,13 @@
 import { combineReducers } from 'redux';
 import { routerReducer as routing } from 'react-router-redux';
-import { reducer as dash } from '../components/Dash';
-import { reducer as info } from '../components/Info';
 import user from './user';
 import title from './title';
+import dishes from './dishes';
+import info from './info';
 
 export default combineReducers({
     routing,
-    dash, 
+    dishes, 
     user, 
     info, title
 });

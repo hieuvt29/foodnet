@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
 import Loading from '../Loading';
-import Dish from '../../sub-components/Dish';
+import Dish from '../Dish';
 import { connect } from 'react-redux';
 
 class Detail extends Component {
@@ -15,6 +15,7 @@ class Detail extends Component {
 	componentDidMount() {
 		const id = this.props.params.id;
 		$.get(`/agent/dishes/${id}`, data => {
+			const dish = data.data;
 			this.setState({
 				loading: false,
 				data: data.data

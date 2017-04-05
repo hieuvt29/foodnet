@@ -1,14 +1,28 @@
 import $ from 'jquery';
-import {
-	SET_DISHES,
-	SET_PAGE,
-	SET_LOADING
-} from '../../actions/actionTypes';
-import { setUser }  from '../../actions/user';
-import deepCopy from '../../utils/deep-copy';
-import { showInfo } from '../Info/Info.action';
+import { showInfo } from './info';
+import { push } from 'react-router-redux';
+import deepCopy from '../utils/deep-copy';
+import { SET_DISHES, SET_PAGE, SET_LOADING } from './actionTypes';
+import { setUser }  from './user';
 
 const LOAD_ITEM_COUNT = 9;
+
+export const addDish = (value) => (dispatch, getState) => {
+	console.log(value);
+	$.post('/agent/dishes', {
+		name: value.name,
+		price: value.price,
+		info: value.description,
+		img: value.image,
+		ingredients: value.ingredients,
+		tags: value.tags
+	}, data => {
+		if (data.errorCode === 0) {
+			dispatch(showInfo('Đã thêm món ăn'));
+			dispatch(push('/'));
+		}
+	});
+}
 
 export const setDishes = (dishes) => ({
 	type: SET_DISHES,
@@ -26,7 +40,7 @@ export const setLoading = loading => ({
 });
 
 export const loadDishes = () => (dispatch, getState) => {
-	const value = getState().dash;
+	const value = getState().dishes;
 	const loading = value.loading;
 	const items = LOAD_ITEM_COUNT;
 	const page = 0;
@@ -69,7 +83,7 @@ export const loadDishes = () => (dispatch, getState) => {
 }
 
 export const comment = (id, comment) => (dispatch, getState) => {
-	const dishes = deepCopy(getState().dash.dishes);
+	const dishes = deepCopy(getState().dishes.dishes);
 	$.post('/agent/dish/comment', {
 		id, comment
 	}, data => {
@@ -96,7 +110,7 @@ export const like = (id) => (dispatch, getState) => {
 		id
 	}, data => {
 		if (data.errorCode === 0) {
-			const dishes = deepCopy(getState().dash.dishes);
+			const dishes = deepCopy(getState().dishes.dishes);
 			const dish = dishes.find(d => d._id === id);
 			if (dish.liked) {
 				dish.likes.count--;
@@ -117,7 +131,7 @@ export const dislike = (id) => (dispatch, getState) => {
 		id
 	}, data => {
 		if (data.errorCode === 0) {
-			const dishes = deepCopy(getState().dash.dishes);
+			const dishes = deepCopy(getState().dishes.dishes);
 			const dish = dishes.find(d => d._id === id);
 			if (dish.disliked) {
 				dish.dislikes.count--;
@@ -134,7 +148,7 @@ export const dislike = (id) => (dispatch, getState) => {
 }
 
 export const favorite = _dish => (dispatch, getState) => {
-	const dishes = deepCopy(getState().dash.dishes);
+	const dishes = deepCopy(getState().dishes.dishes);
 	const user = deepCopy(getState().user);
 	const dish = dishes.find(d => d._id === _dish._id);
 	if (dish.favorite) {
@@ -161,7 +175,7 @@ export const favorite = _dish => (dispatch, getState) => {
 }
 
 export const loadMore = (cb) => (dispatch, getState) => {
-	const value = getState().dash;
+	const value = getState().dishes;
 	const loading = value.loading;
 	const oldDishes = value.dishes;
 	const favorites = getState().user.interests;
@@ -209,4 +223,17 @@ export const loadMore = (cb) => (dispatch, getState) => {
 			}
 		});
 	}
+}
+
+export const removeFavorite = id => (dispatch, getState) => {
+	const user = deepCopy(getState().user);
+	user.interests.splice(user.interests.map(d => d._id).indexOf(id), 1);
+	dispatch(setUser(user));
+	$.post('/agent/dish/interest', {
+		id
+	}, data => {
+		if (data.errorCode === 0) {
+			dispatch(showInfo('Đã loại bỏ khỏi danh sách yêu thích'));
+		}
+	})
 }

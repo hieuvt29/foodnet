@@ -5,7 +5,7 @@ import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import ChipInput from 'material-ui-chip-input';
-import { showInfo } from '../Info/Info.action';
+import { showInfo } from '../../actions/info';
 import { connect } from 'react-redux';
 
 const style = {

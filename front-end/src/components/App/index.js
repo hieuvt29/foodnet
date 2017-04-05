@@ -1,5 +1,24 @@
-import AppComponent from './App.component';
-import AppContainer from './App.container';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import Navbar from '../Navbar';
 
-export const component = AppComponent;
-export const container = AppContainer;
+class App extends Component {
+	render() {
+		return (
+			<div>
+				<Navbar />
+				<div style={{
+					marginTop: 80
+				}}>
+	    			{this.props.children}
+				</div>
+  			</div>
+		)
+	}
+}
+
+export default connect(state => ({
+	user: state.user
+}), {
+
+})(App);

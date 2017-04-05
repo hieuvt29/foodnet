@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { setTitle } from '../../actions/title';
 import Loading from '../Loading';
-import HorDish from '../../sub-components/HorDish';
+import HorDish from '../HorDish';
 import RaisedButton from 'material-ui/RaisedButton';
 import { hashHistory } from 'react-router';
 

@@ -1,8 +1,4 @@
-import {
-	SET_DISHES,
-	SET_PAGE,
-	SET_LOADING
-} from '../../actions/actionTypes';
+import { SET_DISHES, SET_PAGE, SET_LOADING } from '../actions/actionTypes';
 
 const DEFAULT_STATE = {
 	dishes: [],
@@ -10,7 +6,7 @@ const DEFAULT_STATE = {
 	loading: false
 };
 
-const dash = (state = DEFAULT_STATE, action) => {
+export default (state = DEFAULT_STATE, action) => {
 	switch (action.type) {
 		case SET_DISHES:
 			return {
@@ -31,5 +27,3 @@ const dash = (state = DEFAULT_STATE, action) => {
 			return state;
 	}
 }
-
-export default dash;

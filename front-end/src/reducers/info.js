@@ -1,4 +1,4 @@
-import { SHOW_INFO, CLOSE_INFO } from '../../actions/actionTypes';
+import { SHOW_INFO, CLOSE_INFO } from '../actions/actionTypes';
 
 const DEFAULT_STATE = {
 	show: false,
