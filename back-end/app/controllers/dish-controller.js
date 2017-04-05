@@ -19,21 +19,34 @@ function DishController(dishRepository, userRepository) {
 DishController.prototype.getDishes = function (req, res, next) {
 
     var conditions = req.where;
+    var orderBy = req.options.sort;
     var items = req.options.limit;
     var page = req.options.skip;
 
     var pathPop = 'likes.users dislikes.users reviews.user';
     var selectPop = 'username _id';
+    
+    if (conditions.query) {
+        dependencies.dishRepository.fullTextSearch(conditions.query, items, page, pathPop, selectPop, function (err, dishes) {
+            if (err) {
+                next(err);
+            } else {
+                res.dishes = dishes;
+                next();
+            }
 
-    dependencies.dishRepository.fullTextSearch(conditions.query, items, page, pathPop, selectPop, function (err, dishes) {
-        if (err) {
-            next(err);
-        } else {
-            res.dishes = dishes;
-            next();
-        }
+        });
+    } else {
+        dependencies.dishRepository.findAll(conditions, orderBy, items, page, pathPop, selectPop, function (err, dishes) {
+            if (err) {
+                next(err);
+            } else {
+                res.dishes = dishes;
+                next();
+            }
+        })
+    }
 
-    });
 }
 DishController.prototype.getDish = function (req, res, next) {
 
