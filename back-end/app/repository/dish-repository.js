@@ -22,6 +22,25 @@ DishRepository.prototype.findAll = function (condition, orderBy, items, page, pa
 		});
 }
 
+
+DishRepository.prototype.fullTextSearch = function (query, items, page, pathPop, selectPop, callback) {
+	this.model.find({$text: {$search: query}}, {score: {$meta: "textScore"}})
+		.sort({score:{$meta:"textScore"}})
+		.skip(items * page)
+		.limit(items)
+		.populate({
+			path: pathPop,
+			select: selectPop
+		})
+		.exec(function (err, dishes) {
+			if (err) {
+				return callback(err);
+			}
+
+			callback(null, dishes);
+		});
+}
+
 DishRepository.prototype.findById = function (id, pathPop, selectPop, callback) {
 	this.model.findById(id)
 		.populate({

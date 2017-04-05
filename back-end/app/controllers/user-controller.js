@@ -37,13 +37,23 @@ UserController.prototype.createUser = function (req, res) {
         }
         if (!user) {
             dependencies.userRepository.create(userObj, function (err, newUser) {
-                //response
-                let resObj = {
-                    errorCode: 0,
-                    message: "created user!",
-                    data: newUser
-                };
-                res.json(resObj);
+                if (err) {
+                    let resObj = {
+                        errorCode: 1,
+                        message: "bad request",
+                        data: null
+                    };
+                    res.json(resObj);
+                } else {
+                    //response
+                    let resObj = {
+                        errorCode: 0,
+                        message: "created user!",
+                        data: newUser
+                    };
+                    res.json(resObj);
+                }
+
             })
         } else {
             //response

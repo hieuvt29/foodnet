@@ -16,46 +16,26 @@ function DishController(dishRepository, userRepository) {
 //     this.userRepository = userRepository;
 // }
 
-DishController.prototype.getDishes = function (req, res) {
+DishController.prototype.getDishes = function (req, res, next) {
 
     var conditions = req.where;
-    var orderBy = req.options.sort;
     var items = req.options.limit;
     var page = req.options.skip;
 
     var pathPop = 'likes.users dislikes.users reviews.user';
     var selectPop = 'username _id';
 
-    
-    dependencies.dishRepository.findAll(conditions, orderBy, items, page, pathPop, selectPop, function (err, dishes) { 
+    dependencies.dishRepository.fullTextSearch(conditions.query, items, page, pathPop, selectPop, function (err, dishes) {
         if (err) {
-            let resObj = {
-                errorCode: 1,
-                message: "bad request",
-                data: null
-            }
-            return res.json(resObj);
-        }
-
-        if (dishes) {
-            let resObj = {
-                errorCode: 0,
-                message: "get dishes successfully",
-                data: dishes
-            }
-            res.json(resObj);
+            next(err);
         } else {
-            let resObj = {
-                errorCode: 0,
-                message: "not found",
-                data: dishes
-            }
-            res.json(resObj);
+            res.dishes = dishes;
+            next();
         }
 
     });
 }
-DishController.prototype.getDish = function (req, res) {
+DishController.prototype.getDish = function (req, res, next) {
 
     var dishId = req.params.dishId;
     var selectPop = 'username _id';
@@ -63,33 +43,16 @@ DishController.prototype.getDish = function (req, res) {
 
     dependencies.dishRepository.findById(dishId, pathPop, selectPop, function (err, dish) {
         if (err) {
-            let resObj = {
-                errorCode: 1,
-                message: "bad request",
-                data: null
-            }
-            return res.json(resObj);
-        }
-
-        if (dish) {
-            let resObj = {
-                errorCode: 0,
-                message: "get dish successfully",
-                data: dish
-            }
-            res.json(resObj);
+            next(err);
         } else {
-            let resObj = {
-                errorCode: 0,
-                message: "not found",
-                data: dish
-            }
-            res.json(resObj);
+
+            res.dish = dish;
+            next();
         }
 
     });
 }
-DishController.prototype.getLatestDishes = function (req, res) {
+DishController.prototype.getLatestDishes = function (req, res, next) {
 
     var page = req.options.skip;
     var items = req.options.limit;
@@ -101,25 +64,15 @@ DishController.prototype.getLatestDishes = function (req, res) {
 
     dependencies.dishRepository.findAll({}, orderBy, items, page, pathPop, selectPop, function (err, dishes) {
         if (err) {
-            let resObj = {
-                errorCode: 1,
-                message: "bad request",
-                data: null
-            }
-            res.json(resObj);
+            next(err);
         } else {
-
-            let resObj = {
-                errorCode: 0,
-                message: "get latest dishes successfully",
-                data: dishes
-            }
-            res.json(resObj);
+            res.dishes = dishes;
+            next();
         }
     });
 }
 
-DishController.prototype.getDishesOfAgent = function (req, res) {
+DishController.prototype.getDishesOfAgent = function (req, res, next) {
 
     var agentId = req.where.agentId;
     var page = req.options.skip;
@@ -134,50 +87,31 @@ DishController.prototype.getDishesOfAgent = function (req, res) {
         '_id': agentId
     }, '', '', function (err, agent) {
         if (err) {
-            let resObj = {
-                errorCode: 1,
-                message: "bad request",
-                data: null
-            }
-            return res.json(resObj);
+            next(err);
         }
 
         if (agent && agent.isAgent) {
             dependencies.dishRepository
-                .findAll({creator: agentId}, {
+                .findAll({
+                    creator: agentId
+                }, {
                     created_at: -1
                 }, items, page, pathPop, selectPop, function (err, dishes) {
                     if (err) {
-                        let resObj = {
-                            errorCode: 1,
-                            message: "bad request",
-                            data: null
-                        }
-                        return res.json(resObj);
-                    }
-                    if (dishes) {
-                        let resObj = {
-                            errorCode: 0,
-                            message: "get dishes successfully",
-                            data: dishes
-                        }
+                        next(err);
+                    } else {
 
-                        res.json(resObj);
+                        res.dishes = dishes;
+                        next();
                     }
                 })
         } else {
-            let resObj = {
-                errorCode: 0,
-                message: "not found",
-                data: null
-            }
-
-            res.json(resObj);
+            next();
         }
     })
 }
 
-DishController.prototype.addDish = function (req, res) {
+DishController.prototype.addDish = function (req, res, next) {
 
     var user = req.user;
 
@@ -190,47 +124,27 @@ DishController.prototype.addDish = function (req, res) {
     if (user && user.isAgent) {
         dependencies.dishRepository.create(dishProps, function (err, newDish) {
             if (err) {
-                let resObj = {
-                    errorCode: 1,
-                    message: "bad request",
-                    data: null
-                }
-                return res.json(resObj);
+                next(err);
             } else {
                 //add dish to Agent
                 user.dishes.push(newDish._id);
                 user.save(function (err) {
                     if (err) {
-                        let resObj = {
-                            errorCode: 1,
-                            message: "bad request",
-                            data: null
-                        }
-                        res.json(resObj);
+                        next(err);
                     }
                 });
                 //response
-                let resObj = {
-                    errorCode: 0,
-                    message: "created dish",
-                    data: newDish
-                }
-                res.json(resObj);
+                res.newDish = newDish;
+                next();
             }
         })
     } else {
-        let resObj = {
-            errorCode: 0,
-            message: "not found",
-            data: null
-        }
-
-        res.json(resObj);
+        next();
     }
 
 };
 
-DishController.prototype.removeDish = function (req, res) {
+DishController.prototype.removeDish = function (req, res, next) {
 
     var user = req.user;
     var dishId = req.params.dishId;
@@ -239,47 +153,27 @@ DishController.prototype.removeDish = function (req, res) {
         //Remove dish from database
         dependencies.dishRepository.findByIdAndRemove(dishId, function (err, dish) {
             if (err) {
-                let resObj = {
-                    errorCode: 1,
-                    message: "bad request",
-                    data: null
-                }
-                return res.json(resObj);
+                next(err);
             }
             let index = user.dishes.indexOf(dishId);
             user.dishes.splice(index, 1);
             user.save((err) => {
                 if (err) {
-                    let resObj = {
-                        errorCode: 1,
-                        message: "bad request",
-                        data: null
-                    }
-                    res.json(resObj);
+                    next(err);
                 } else {
                     //response
-                    let resObj = {
-                        errorCode: 0,
-                        message: "removed dish",
-                        data: dish
-                    };
-                    res.json(resObj);
+                    res.removedDish = dish;
+                    next();
                 }
             });
 
         });
     } else {
-        let resObj = {
-            errorCode: 0,
-            message: "not found",
-            data: null
-        }
-
-        res.json(resObj);
+        next();
     }
 }
 
-DishController.prototype.updateDish = function (req, res) {
+DishController.prototype.updateDish = function (req, res, next) {
 
     var dishObj = req.body;
     var dishId = req.params.dishId;
@@ -290,29 +184,14 @@ DishController.prototype.updateDish = function (req, res) {
     if (user && user.isAgent) {
         dependencies.dishRepository.update(dishObj, function (err, dish) {
             if (err) {
-                let resObj = {
-                    errorCode: 1,
-                    message: "bad request",
-                    data: null
-                }
-                res.json(resObj);
+                next(err);
             } else {
-                let resObj = {
-                    errorCode: 0,
-                    message: "updated dish",
-                    data: dish
-                }
-                res.json(resObj);
+                res.updatedDish = dish;
+                next();
             }
         });
     } else {
-        let resObj = {
-            errorCode: 0,
-            message: "not found",
-            data: null
-        }
-
-        res.json(resObj);
+        next();
     }
 }
 
