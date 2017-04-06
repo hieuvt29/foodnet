@@ -23,6 +23,8 @@ app.use(bodyParser.json());
 mongoose.connect(process.env.MONGO_URI|| 'mongodb://localhost:27017/foodnet' );
 mongoose.Promise = global.Promise; 
 
+var path = require('path');
+app.use('/static', express.static(path.join(__dirname, 'static')));
 
 //config path to use shortcut in views part
 var rootPath = process.cwd();

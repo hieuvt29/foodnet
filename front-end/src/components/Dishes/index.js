@@ -16,6 +16,7 @@ class Dishes extends Component {
 			loading: true
 		};
 	}
+	
 	componentDidMount() {
 		$.get('/agent/dishes?agentId=' + this.props.user._id, data => {
 			this.setState({
@@ -24,6 +25,7 @@ class Dishes extends Component {
 			});
 		});
 	}
+
 	remove(id) {
 		const dishes = _.cloneDeep(this.state.dishes);
 		dishes.splice(dishes.map(d => d._id).indexOf(id), 1);
@@ -38,9 +40,7 @@ class Dishes extends Component {
 			}
 		});
 	}
-	edit(id) {
 
-	}
 	render() {
 		const { dishes, loading } = this.state;
 		return (
@@ -64,14 +64,26 @@ class Dishes extends Component {
 							<div>
 								<RaisedButton
 									style={{
-										marginLeft: 5,
 										marginRight: 5
-									}}
-									label="Sửa" 
+									}} 
+									label="Xem chi tiết" 
 									primary={true}
+									icon={<i style={{color: '#fff'}} className="material-icons">remove_red_eye</i>}
+									onTouchTap={() => {
+										this.props.push(`/detail/${dish._id}`);
+									}}
+								/>
+								<RaisedButton
+									style={{
+										marginLeft: 5,
+										marginRight: 5,
+									}}
+									backgroundColor="#a4c639"
+									labelColor="#fff"
+									label="Sửa"
 									icon={<i style={{color: '#fff'}} className="material-icons">delete_forever</i>}
 									onTouchTap={() => {
-										hashHistory.push(`/edit/${dish._id}`);
+										this.props.push(`/edit/${dish._id}`);
 									}}
 								/>
 								<RaisedButton 
@@ -104,6 +116,11 @@ class Dishes extends Component {
 	}
 }
 
+import { setTitle } from '../../actions/title';
+import { push } from 'react-router-redux';
+
 export default connect(state => ({
 	user: state.user
-}), {})(Dishes);
+}), {
+	setTitle, push
+})(Dishes);

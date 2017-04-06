@@ -3,9 +3,19 @@ import HorDish from '../HorDish';
 import RaisedButton from 'material-ui/RaisedButton';
 
 class Favorite extends Component {
+	constructor(props) {
+		super(props);
+		this.details = this.details.bind(this);
+	}
+	componentDidMount() {
+		this.props.setTitle('Yêu thích');
+	}
 	remove(id) {
 		console.log('Remove id %s', id);
 		this.props.removeFavorite(id);
+	}
+	details(id) {
+		this.props.push(`/detail/${id}`);
 	}
 	render() {
 		const dishes = this.props.favorite;
@@ -25,6 +35,17 @@ class Favorite extends Component {
 						content={dish.info}
 						actions={
 							<div>
+								<RaisedButton
+									style={{
+										marginRight: 5
+									}} 
+									label="Xem chi tiết" 
+									primary={true}
+									icon={<i style={{color: '#fff'}} className="material-icons">remove_red_eye</i>}
+									onTouchTap={() => {
+										this.details(dish._id);
+									}}
+								/>
 								<RaisedButton 
 									label="Loại bỏ" 
 									secondary={true}
@@ -45,9 +66,11 @@ class Favorite extends Component {
 
 import { connect } from 'react-redux';
 import { removeFavorite } from '../../actions/dishes';
+import { setTitle } from '../../actions/title';
+import { push } from 'react-router-redux';
 
 export default connect(state => ({
 	favorite: state.user.interests
 }), {
-	removeFavorite
+	removeFavorite, push, setTitle
 })(Favorite);

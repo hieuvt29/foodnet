@@ -29,6 +29,7 @@ class Edit extends Component {
 		this.update = this.update.bind(this);
 	}
 	componentDidMount() {
+		this.props.setTitle('Chỉnh sửa');
 		const id = this.props.params.id;
 		$.get(`/agent/dishes/${id}`, data => {
 			this.setState({
@@ -183,8 +184,10 @@ class Edit extends Component {
 	}
 }
 
+import { setTitle } from '../../actions/title';
+
 export default connect(state => ({
 
 }), {
-	showInfo
+	showInfo, setTitle
 }) (Edit);

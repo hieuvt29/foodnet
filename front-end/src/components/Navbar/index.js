@@ -9,6 +9,7 @@ import Divider from 'material-ui/Divider';
 import { hashHistory, Link } from 'react-router';
 import { connect } from 'react-redux';
 import { logout } from '../../actions/user';
+import './style.css';
 
 const style = {
 	MenuItemInner: {
@@ -77,7 +78,7 @@ class Navbar extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			s: ''
+			s: '',
 		}
 	}
 
@@ -115,7 +116,7 @@ class Navbar extends Component {
 			          		backgroundColor: '#ddd',
 			          		width: '2px'
 			          	}}/>
-			          	<h5 style={{
+			          	<h5 className="title" style={{
 			          		color: '#fff',
 			          		fontWeight: 500,
 			          		marginTop: 16,
@@ -141,6 +142,7 @@ class Navbar extends Component {
 	    								position: 'absolute'
 					          	}} className="material-icons">search</i>
 					          	<TextField
+					          		className="red-selected"
 					          		type="text"
 							    	hintText={<span style={{color: 'white'}}>Tìm kiếm</span>}
 							    	inputStyle={{
@@ -157,6 +159,11 @@ class Navbar extends Component {
 							    	}}
 							    	value={this.state.s}
 							    	onChange={(e, v) => this.setState({s: v})}
+							    	onFocus={e => {
+							    		if (e.target.value !== "") {
+							    			e.target.select();
+							    		}
+							    	}}
 							    />
 						    </form>
 			          	</div>

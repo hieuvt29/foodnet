@@ -18,6 +18,7 @@ class Dash extends Component {
 
 	componentDidMount() {
 		window.addEventListener("scroll", this.handleScroll);
+		this.props.setTitle('Trang chủ');
 	}
 
 	componentWillUnmount() {
@@ -117,10 +118,12 @@ import { connect } from 'react-redux';
 import {
 	loadDishes, comment, like, dislike, loadMore, favorite
 } from '../../actions/dishes';
+import { setTitle } from '../../actions/title';
 
 export default connect(state => ({
 	value: state.dishes,
 	user: state.user
 }), {
-	loadDishes, comment, like, dislike, loadMore, favorite
+	loadDishes, comment, like, dislike, loadMore, favorite,
+	setTitle
 })(Dash);

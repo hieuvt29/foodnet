@@ -1,0 +1,9 @@
+.red-selected input::selection {
+	background: #FF1744;
+}
+
+@media screen and (max-width: 660px) {
+	.title {
+		display: none;
+	}
+}

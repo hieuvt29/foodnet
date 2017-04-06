@@ -4,7 +4,6 @@ import { setTitle } from '../../actions/title';
 import Loading from '../Loading';
 import HorDish from '../HorDish';
 import RaisedButton from 'material-ui/RaisedButton';
-import { hashHistory } from 'react-router';
 
 class Search extends Component {
 	constructor(props) {
@@ -39,7 +38,7 @@ class Search extends Component {
 		}, 2000);
 	}
 	details(id) {
-		hashHistory.push(`/detail/${id}`);
+		this.props.push(`/detail/${id}`);
 	}
 	render() {
 		return (
@@ -76,8 +75,10 @@ class Search extends Component {
 	}
 }
 
+import { push } from 'react-router-redux';
+
 export default connect(state => ({
 
 }), {
-	setTitle
+	setTitle, push
 })(Search);

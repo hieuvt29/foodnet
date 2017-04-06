@@ -21,6 +21,7 @@ import Dishes from './components/Dishes';
 import Edit from './components/Edit';
 import Search from './components/Search';
 import Detail from './components/Detail';
+import Page404 from './components/Page404';
 
 const history = syncHistoryWithStore(hashHistory, store);
 injectTapEventPlugin();
@@ -34,9 +35,24 @@ ReactDOM.render(
 
 function checkLogin(nextState, replace, callback) {
 	const user = store.getState().user;
-	console.log('Check');
 	if (!user) {
 		replace('/login');
+	}
+	callback();
+}
+
+function checkAgent(nextState, replace, callback) {
+	const user = store.getState().user;
+	if (!user.isAgent) {
+		replace('/');
+	}
+	callback();
+}
+
+function checkCustomer(nextState, replace, callback) {
+	const user = store.getState().user;
+	if (user.isAgent) {
+		replace('/');
 	}
 	callback();
 }
@@ -49,16 +65,17 @@ function render() {
 		  			<Route path="/" component={Container}>
 			  			<Route path="" component={App} onEnter={checkLogin}>
 			  				<IndexRoute component={Dash} />
-			  				<Route path="add" component={AddDish} />
+			  				<Route path="add" component={AddDish} onEnter={checkAgent}/>
 			  				<Route path="info" component={UserInfo} />
-			  				<Route path="favorite" component={Favorite} />
-			  				<Route path="dishes" component={Dishes} />
-			  				<Route path="edit/:id" component={Edit} />
+			  				<Route path="favorite" component={Favorite} onEnter={checkCustomer}/>
+			  				<Route path="dishes" component={Dishes} onEnter={checkAgent}/>
+			  				<Route path="edit/:id" component={Edit} onEnter={checkAgent}/>
 			  				<Route path="search/:s" component={Search} />
 			  				<Route path="detail/:id" component={Detail} />
 			  			</Route>
 			  			<Route path="login" component={Login} />
 			  			<Route path="signup" component={Signup} />
+			  			<Route path="*" component={Page404} />
 		  			</Route>
 		  		</Router>
 			</Provider>
