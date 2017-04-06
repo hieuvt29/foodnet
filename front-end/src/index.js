@@ -22,6 +22,7 @@ import Edit from './components/Edit';
 import Search from './components/Search';
 import Detail from './components/Detail';
 import Page404 from './components/Page404';
+import Loading from './components/Loading';
 
 const history = syncHistoryWithStore(hashHistory, store);
 injectTapEventPlugin();
@@ -29,7 +30,9 @@ injectTapEventPlugin();
 const r = document.getElementById('root');
 
 ReactDOM.render(
-	<div>Loading</div>,
+	<MuiThemeProvider>
+		<Loading/>
+	</MuiThemeProvider>,
 	r
 );
 

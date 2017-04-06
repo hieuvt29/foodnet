@@ -12,3 +12,7 @@ export const SHOW_INFO = 'SHOW_INFO';
 export const CLOSE_INFO = 'CLOSE_INFO';
 
 export const SET_TITLE = 'SET_TITLE';
+
+export const SET_SEARCH_LIST = 'SET_SEARCH_LIST';
+export const SET_SEARCH_LOADING = 'SET_SEARCH_LOADING';
+export const SET_SEARCH_QUERY = 'SET_SEARCH_QUERY';

@@ -6,41 +6,17 @@ import HorDish from '../HorDish';
 import RaisedButton from 'material-ui/RaisedButton';
 
 class Search extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			loading: true,
-			data: []
-		}
-	}
 	componentDidMount() {
 		this.props.setTitle('Tìm kiếm');
-		setTimeout(() => {
-			this.setState({
-				loading: false,
-				data: [{
-					_id: '58bffef2e5cab61ac8fb9215',
-					title: 'Pha mắm tôm ngon',
-					image: 'http://afamilycdn.com/2017/mamtom-1-1488959679795.jpg',
-					content: 'cách pha mắm tôm'
-				},{
-					_id: '58bffdbfe5cab61ac8fb9214',
-					title: 'Cá kho',
-					image: 'http://img.webmd.com/dtmcms/live/webmd/consumer_assets/site_images/article_thumbnails/quizzes/food_safety_quiz/650x350_food_safety_quiz.jpg',
-					content: 'Cá kho thơm ngon, gia vị đậm đà'
-				},{
-					_id: '58bffd96e5cab61ac8fb9213',
-					title: 'Thịt kho tàu',
-					image: 'http://anh.eva.vn/upload/1-2015/images/2015-01-17/1421482918-thit-kho-tau-1.jpg',
-					content: 'Ngày Tết gia đình thường có khách, chuẩn bị sẵn nồi thịt kho tàu thì chẳng bao giờ lo thiếu món đãi bạn bè. Cách làm thịt kho tàu không khó nhé!'
-				}]
-			});
-		}, 2000);
+		if (this.props.params.s !== this.props.query) {
+			this.props.search(this.props.params.s);
+		}
 	}
 	details(id) {
 		this.props.push(`/detail/${id}`);
 	}
 	render() {
+		const { dishes, loading, query } = this.props;
 		return (
 			<div style={{
 				margin: '5px 15px'
@@ -50,12 +26,14 @@ class Search extends Component {
 				}}>
 					<span style={{
 						fontWeight: 300
-					}}>Kết quả tìm kiếm cho</span> {this.props.params.s}
+					}}>Kết quả tìm kiếm cho</span> {query}
 				</h5>
-				{this.state.loading && <Loading />}
-				{this.state.data.map(d => (
-					<HorDish key={d._id} content={d.content} 
-						title={d.title} image={d.image}
+				{loading && <Loading />}
+				{!loading && (dishes.length === 0 ?
+				<div>Không tìm thấy kết quả nào.</div> :
+				dishes.map(d => (
+					<HorDish key={d._id} content={d.info} 
+						title={d.name} image={d.img}
 						actions={
 							<div>
 								<RaisedButton 
@@ -69,16 +47,19 @@ class Search extends Component {
 							</div>
 						}
 					/>
-				))}
+				)))}
 			</div>
 		)
 	}
 }
 
 import { push } from 'react-router-redux';
+import { search } from '../../actions/search';
 
 export default connect(state => ({
-
+	dishes: state.search.dishes,
+	query: state.search.query,
+	loading: state.search.loading
 }), {
-	setTitle, push
+	setTitle, push, search
 })(Search);

@@ -133,7 +133,9 @@ class Navbar extends Component {
 			          	}}>
 			          		<form onSubmit={(e) => {
 			          			e.preventDefault();
-			          			hashHistory.push(`/search/${this.state.s}`);
+			          			if (this.state.s !== "") {
+			          				this.props.search(this.state.s);			          				
+			          			}
 			          		}}>
 					          	<i style={{
 					          		color: '#fff',
@@ -180,9 +182,11 @@ class Navbar extends Component {
 	}
 }
 
+import { search } from '../../actions/search';
+
 export default connect(state => ({
 	user: state.user,
 	title: state.title
 }), {
-	logout
+	logout, search
 })(Navbar);

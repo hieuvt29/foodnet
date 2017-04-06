@@ -4,10 +4,13 @@ import user from './user';
 import title from './title';
 import dishes from './dishes';
 import info from './info';
+import search from './search';
 
 export default combineReducers({
     routing,
     dishes, 
     user, 
-    info, title
+    info, 
+    title,
+    search
 });
