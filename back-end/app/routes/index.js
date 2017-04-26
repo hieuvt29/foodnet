@@ -22,6 +22,7 @@ var dishController = new DishController(dishRepository, userRepository);
 var userActionController = new UserActionController(dishRepository, userRepository);
 
 var dishControllerMiddleware = require('../middlewares/dish-ctrl-mw');
+var userActionControllerMiddleware = require('../middlewares/user-action-ctrl-mw');
 
 module.exports = function (app, passport) {
     function isLoggedIn(req, res, next) {
@@ -120,23 +121,23 @@ module.exports = function (app, passport) {
     */
 
 
-    app.post('/agent/dish/like', isLoggedIn, userActionController.like);
+    app.post('/agent/dish/like', isLoggedIn, userActionController.like, userActionControllerMiddleware.like);
     /*input: 
         var dishId = req.body.id;
         var userId = req.user._id;
     */
-    app.post('/agent/dish/dislike', isLoggedIn, userActionController.dislike);
+    app.post('/agent/dish/dislike', isLoggedIn, userActionController.dislike, userActionControllerMiddleware.dislike);
     /*input:  
         var dishId = req.body.id;
         var userId = req.user._id;
     */
-    app.post('/agent/dish/comment', isLoggedIn, userActionController.comment);
+    app.post('/agent/dish/comment', isLoggedIn, userActionController.comment, userActionControllerMiddleware.comment);
     /*input: 
         var dishId = req.body.id;
         var userId = req.user._id;
         var comment = req.body.comment;
     */
-    app.post('/agent/dish/interest', isLoggedIn, userActionController.interest);
+    app.post('/agent/dish/interest', isLoggedIn, userActionController.interest, userActionControllerMiddleware.interest);
 
     //index page
     app.route('/', '/home')
