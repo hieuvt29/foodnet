@@ -22,7 +22,6 @@ export const search = query => (dispatch, getState) => {
 	dispatch(setSearchQuery(query));
 	dispatch(push(`/search/${query}`))
 	$.get(`/dishes?query=${query}`, data => {
-		console.log(data);
 		dispatch(setSearchLoading(false));
 		dispatch(setSearchList(data.data));
 	});

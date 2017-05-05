@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
-import TextField from 'material-ui/TextField';
-import MenuItem from 'material-ui/MenuItem';
+import { TextField, MenuItem, IconButton, IconMenu, AppBar, Divider} from 'material-ui';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import IconButton from 'material-ui/IconButton';
-import IconMenu from 'material-ui/IconMenu';
-import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
-import Divider from 'material-ui/Divider';
+import { ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 import { hashHistory, Link } from 'react-router';
 import { connect } from 'react-redux';
 import { logout } from '../../actions/user';
@@ -17,7 +13,37 @@ const style = {
 	},
 	iconStyle: {
 		color: 'rgb(117, 117, 117)'
-	}
+	},
+	icon: {
+		color: '#fff'
+	},
+	title: {
+		color: '#fff',
+		fontWeight: '500',
+		fontSize: 35,
+		paddingLeft: 30,
+		paddingRight: 20,
+		fontFamily: "'Lobster', cursive"
+	},
+	subTitle:{
+		color: '#fff',
+		fontWeight: 500,
+		marginLeft: 30,
+		fontSize: 22
+	},
+	toolbar: {
+		height: '100%'
+	},
+	searchWrapper: {
+	    backgroundColor: '#4DD0E1',
+	    margin: 10,
+	    paddingLeft: 20,
+	    paddingRight: 20,
+	    borderRadius: 3,
+	    flex: 1,
+	    display: 'flex',
+    	alignItems: 'center'
+	},
 }
 
 function Menu(props) {
@@ -80,104 +106,64 @@ class Navbar extends Component {
 		this.state = {
 			s: '',
 		}
+		this.handleSearchChange = this.handleSearchChange.bind(this);
+		this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
 	}
 
-  	handleChange = (event, index, value) => this.setState({value});
+	handleSearchChange(e, s) {
+		this.setState({s});
+	}
+
+	handleSearchSubmit(e) {
+		e.preventDefault();
+		if (this.state.s !== "") {
+			this.props.search(this.state.s);
+		}
+	}
 
 	render() {
 		const {user, logout} = this.props;
 		return (
-			<div>
-				<Toolbar
-					style={{
-						backgroundColor: '#00BCD4',
-						position: 'fixed',
-						top: '0',
-						width: '100%',
-						height: 66,
-						zIndex: '5',
-						boxShadow: 'rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px'
-					}}
-				>
-			        <ToolbarGroup>
-			          	<Link style={{
-			          		textDecoration: 'none'
-			          	}} to="/">
-			          		<ToolbarTitle text="Foodnet" style={{
-				          		color: 'white',
-				          		fontWeight: '500',
-				          		fontSize: '40px',
-				          		paddingLeft: '30px',
-				          		paddingRight: '0px',
-				          		fontFamily: "'Lobster', cursive"
-			          		}} />
-			          	</Link>
-			          	<ToolbarSeparator style={{
-			          		backgroundColor: '#ddd',
-			          		width: '2px'
-			          	}}/>
-			          	<h5 className="title" style={{
-			          		color: '#fff',
-			          		fontWeight: 500,
-			          		marginTop: 16,
-			          		marginLeft: 30,
-			          		fontSize: 22
-			          	}}>
-			          		{this.props.title}
-			          	</h5>
-			          	<div style={{
-			          		backgroundColor: '#4DD0E1',
-			          		marginLeft: '30px',
-			          		borderRadius: 5,
-			          		position: 'relative'
-			          	}}>
-			          		<form onSubmit={(e) => {
-			          			e.preventDefault();
-			          			if (this.state.s !== "") {
-			          				this.props.search(this.state.s);			          				
-			          			}
-			          		}}>
-					          	<i style={{
-					          		color: '#fff',
-					          		marginLeft: '10px',
-					          		    top: 13,
-	    								position: 'absolute'
-					          	}} className="material-icons">search</i>
-					          	<TextField
-					          		className="red-selected"
-					          		type="text"
-							    	hintText={<span style={{color: 'white'}}>Tìm kiếm</span>}
-							    	inputStyle={{
-							    		color: 'white',
-							    		paddingBottom: 5
-							    	}}
-							    	textareaStyle={{
-							    		paddingRight: 5
-							    	}}
-							    	underlineShow={false}
-							    	style={{
-							    		marginLeft: '40px',
-							    		width: '76%'
-							    	}}
-							    	value={this.state.s}
-							    	onChange={(e, v) => this.setState({s: v})}
-							    	onFocus={e => {
-							    		if (e.target.value !== "") {
-							    			e.target.select();
-							    		}
-							    	}}
-							    />
-						    </form>
-			          	</div>
-			        </ToolbarGroup>
-			        <ToolbarGroup lastChild={true}>
-			          	<Menu
-			          		user={user}
-			          		logout={logout}
-			          	/>
-			        </ToolbarGroup>
-			    </Toolbar>
-			</div>
+			<AppBar
+				style={{ flexDirection: 'row', position: 'fixed', top: 0, width: '100%' }}
+				iconStyleRight={{ marginTop: 0 }}
+				iconStyleLeft={{ marginTop: 0, flex: 1 }}
+				titleStyle={{ display: 'none' }}
+				iconElementLeft={
+					<ToolbarGroup style={style.toolbar}>
+						<Link to="/">
+							<ToolbarTitle text="Foodnet" style={style.title} />
+						</Link>
+						<Divider style={{
+							color: '#fff',
+							height: 40,
+							width: 2
+						}}/>
+						<ToolbarTitle text={this.props.title} style={style.subTitle}/>
+						<form style={style.searchWrapper} onSubmit={this.handleSearchSubmit}>
+							<i style={{color:'#fff'}} className="material-icons">search</i>
+							<TextField
+								underlineShow={false}
+								inputStyle={{color: '#fff', paddingLeft: 10}}
+								fullWidth={true}
+								value={this.state.search}
+								onChange={this.handleSearchChange}
+								name="search"
+								onFocus={e => {
+									if (e.target.value) {
+										e.target.select();
+									}
+								}}
+							/>
+						</form>
+					</ToolbarGroup>
+				}
+				iconElementRight={
+					<ToolbarGroup style={style.toolbar}>
+						<Menu user={user} logout={logout}/>
+					</ToolbarGroup>
+				}
+			/>
 		)
 	}
 }

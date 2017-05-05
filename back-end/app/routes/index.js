@@ -1,7 +1,7 @@
 'use strict';
 
 var rootPath = process.cwd();
-
+var path = require('path');
 // rootPath = rootPath.includes("/back-end")?rootPath: rootPath + "/back-end";
 
 // console.log(rootPath);
@@ -142,7 +142,7 @@ module.exports = function (app, passport) {
     //index page
     app.route('/', '/home')
         .get(function (req, res) {
-            //send index/home page
+            res.sendFile(path.join(__dirname, '../../index.html'));
         });
 
 }
